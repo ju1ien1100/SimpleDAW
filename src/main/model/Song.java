@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import sound.MidiPlayer;
+import ui.sound.MidiPlayer;
 
 public class Song {
     private static int DEFAULT_NUMTRACKS = 5;

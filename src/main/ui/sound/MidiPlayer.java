@@ -1,4 +1,4 @@
-package sound;
+package ui.sound;
 
 import model.*;
 import javax.sound.midi.*;

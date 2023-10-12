@@ -2,6 +2,8 @@ package sound;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ui.sound.MidiPlayer;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MidiPlayerTest {
