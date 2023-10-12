@@ -36,45 +36,61 @@ public class Main {
         System.out.println("-synth");
     }
 
-    public static void mainView(Song userSong) {
-        viewSong(userSong);
+    public static void editMeasure(Song userSong) {
+        Scanner scanner = new Scanner(System.in);
+        showInstruments();
+        String instrument = scanner.nextLine().toLowerCase();
+        Measure userMeasure = new Measure(instrument);
+        populateMeasure(userMeasure);
 
+        System.out.println("What time do you want this added (i.e what x index?)");
+        int xindex  = scanner.nextInt();
+
+        System.out.println("What channel do you want to added (i.e what y index?)");
+        int yindex = scanner.nextInt();
+
+        userSong.addMeasure(yindex, xindex, userMeasure);
+        mainView(userSong);
+    }
+
+    public static void startThread(Song userSong) {
+        Thread playThread = new Thread(() -> userSong.playSong());
+        playThread.start();
+        System.out.println("enter 'pause' to pause the song");
+        Scanner scanner = new Scanner(System.in);
+        String response = scanner.nextLine().toLowerCase();
+        if (response.equals("pause")) {
+            userSong.pauseSong();
+            try {
+                playThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            mainView(userSong);
+        }
+    }
+
+    public static String checkMeasureEdit() {
         System.out.println("Do you want to add a measure:");
         Scanner scanner = new Scanner(System.in);
         String userResponse = scanner.nextLine().toLowerCase();
 
+        return userResponse;
+    }
+
+    public static void mainView(Song userSong) {
+        viewSong(userSong);
+
+        Scanner scanner = new Scanner(System.in);
+        String userResponse = checkMeasureEdit();
+
         if (userResponse.equals("yes")) {
-            showInstruments();
-            String instrument = scanner.nextLine().toLowerCase();
-            Measure userMeasure = new Measure(instrument);
-            populateMeasure(userMeasure);
-
-            System.out.println("What time do you want this added (i.e what x index?)");
-            int xindex  = scanner.nextInt();
-
-            System.out.println("What channel do you want to added (i.e what y index?)");
-            int yindex = scanner.nextInt();
-
-            userSong.addMeasure(yindex, xindex, userMeasure);
-            mainView(userSong);
+            editMeasure(userSong);
         } else {
             System.out.println("Do you want to play your song?:");
             String terminal = scanner.nextLine().toLowerCase();
             if (terminal.equals("yes")) {
-                Thread playThread = new Thread(() -> userSong.playSong());
-                playThread.start();
-                System.out.println("enter 'pause' to pause the song");
-
-                String response = scanner.nextLine().toLowerCase();
-                if (response.equals("pause")) {
-                    userSong.pauseSong();
-                    try {
-                        playThread.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    mainView(userSong);
-                }
+                startThread(userSong);
             } else {
                 mainView(userSong);
             }
@@ -149,7 +165,7 @@ public class Main {
 
     private static void displayAsciiArt() {
         System.out.println("  ______ _          _            _       ");
-        timeOut(300);
+        timeOut(400);
         System.out.println(" |  ____| |        | |          | |      ");
         timeOut(300);
         System.out.println(" | |__  | |        | |_   _     | |_   _ ");

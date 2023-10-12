@@ -14,5 +14,13 @@ public class NoteTest {
         blankNote = new Note("", 1000, 600);
     }
 
+    @Test
+    public void getterTest() {
+        assertEquals("C", noteC.getPitch());
+        assertEquals(1000, noteC.getDuration());
+        assertEquals(600, noteC.getVelocity());
+    }
+
+
 
 }

@@ -41,6 +41,7 @@ public class MidiPlayer {
     }
 
     //REQUIRES: a positive trackChannel, a valid instrument, non null list of Notes
+    //EFFECT: Handles the playing and stoping of a melody for a given instrument
     public void playNotes(int trackChannel, String instrumentName, List<Note> melody) {
         channels[trackChannel].programChange(selectInstrument(instrumentName));
 

@@ -13,11 +13,16 @@ public class Song {
     private int bpm;
     private boolean playing = false;
 
+    //EFFECTS: constructs a new song object with a 8*5 array of measures
+    //NOTE: Later versions will abstract this to be an arbitrary sized array, but makes command line hard to interpret
     public Song() {
         this.measures = new Measure[DEFAULT_NUMTRACKS][DEFAULT_NUMMEASURE];
         this.bpm = 120;
     }
 
+    //REQUIRES: DEFAULT_NUMTRACKS > trackIndex >= 0, DEFAULT_NUMMEASURE > measureIndex >= 0
+    //MODIFIES: this, measure
+    //EFFECTS: adds a measure to a given row in measure and then sets the Channel of the measure
     public void addMeasure(int trackIndex, int measureIndex, Measure measure) {
         measures[trackIndex][measureIndex] = measure;
         measure.setChannel(trackIndex);
@@ -27,6 +32,8 @@ public class Song {
         return measures;
     }
 
+    //Effects: Plays the song by sending each measure to the midi device
+    //Modifies: this
     public void playSong() {
         MidiPlayer midi = new MidiPlayer();
         this.playing = true;
@@ -49,6 +56,7 @@ public class Song {
         }
     }
 
+    //Effects: waits for threads to finish compiling and then plays at the same time
     private void synchronizeThreads(List<Thread> threads) {
         for (Thread thread : threads) {
             try {

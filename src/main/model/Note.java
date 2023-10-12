@@ -1,21 +1,17 @@
 package model;
 
-
+//Note this is a data abstraction for ease of design
 public class Note {
     private String pitch;
     private long duration;
     private int velocity;
 
 
-    //EFFECTS: constructs an empty list of notes
+    //EFFECTS: constructs a Note with a string representation of a pitch
     public Note(String pitch, long duration, int velocity) {
         this.pitch = pitch;
         this.duration  = duration;
         this.velocity = velocity;
-    }
-
-    public void playNote() {
-        return;
     }
 
     public String getPitch() {

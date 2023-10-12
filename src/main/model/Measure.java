@@ -20,8 +20,9 @@ public class Measure {
         this.notes.add(note);
     }
 
+    // Requires: index > 0
     //Modifies: this, notes
-    //
+    //EFFECTS: replaces the note at the inputed index
     public boolean replaceNote(int index, Note note) {
         if (this.notes.size() - 1 < index) {
             return false;
@@ -36,6 +37,8 @@ public class Measure {
         return channel;
     }
 
+    //MODIFIES: this
+    //EFFECTS: sets the channel of the measure
     public void setChannel(int channel) {
         this.channel = channel;
     }
@@ -44,8 +47,7 @@ public class Measure {
         return notes;
     }
 
-    //EFFECTS:
-
+    //EFFECTS:Gets the string representations of the note pitches
     public String[] getStringNotes() {
         int numNotes = this.notes.size();
         String[] notes = new String[numNotes];
@@ -63,10 +65,6 @@ public class Measure {
 
     public void setInstrument(String instrumentNew) {
         instrument = instrumentNew;
-    }
-
-    public void clearNotes() {
-        notes = new ArrayList<>();
     }
 
 }
