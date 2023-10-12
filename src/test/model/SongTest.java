@@ -42,4 +42,16 @@ class SongTest {
         testSong.pauseSong();
         assertFalse(testSong.getPlaying());
     }
+
+    @Test
+    public void testAddTrack() {
+        testSong.addTrack();
+        assertEquals(6, testSong.getMeasures().length);
+    }
+
+    @Test
+    public void testAddMeasureColumn() {
+        testSong.addMeasureColumn();
+        assertEquals(9, testSong.getMeasures()[0].length);
+    }
 }

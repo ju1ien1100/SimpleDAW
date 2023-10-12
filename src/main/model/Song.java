@@ -42,6 +42,28 @@ public class Song {
         return playing;
     }
 
+    public void addTrack() {
+        Measure[][] newMeasure = new Measure[measures.length + 1][measures[0].length];
+        for (int i = 0; i < measures.length; i++) {
+            for (int j = 0; j < measures[0].length; j++) {
+                newMeasure[i][j] = measures[i][j];
+            }
+        }
+        measures = newMeasure;
+    }
+
+    public void addMeasureColumn() {
+        Measure[][] newMeasure = new Measure[measures.length][measures[0].length + 1];
+        for (int i = 0; i < measures.length; i++) {
+            for (int j = 0; j < measures[0].length; j++) {
+                newMeasure[i][j] = measures[i][j];
+            }
+        }
+        measures = newMeasure;
+    }
+
+
+    //Sends the measure data to the midi player (access external hardware)
     public void playSong() {
         MidiPlayer midi = new MidiPlayer();
         this.playing = true;
