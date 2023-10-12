@@ -10,12 +10,14 @@ public class MeasureTest {
     private Measure testMeasure;
     private Note noteC;
     private Note noteD;
+    private Song testSong;
 
     @BeforeEach
     public void setUp() {
         testMeasure = new Measure("piano");
         noteC = new Note("C", 1000, 600);
         noteD = new Note("D", 1000, 600);
+        testSong = new Song();
     }
 
     @Test
@@ -45,5 +47,25 @@ public class MeasureTest {
     public void testReplaceNoteFail() {
         testMeasure.addNote(noteC);
         assertFalse(testMeasure.replaceNote(1, noteD));
+    }
+
+    @Test
+    public void testGetterSetter() {
+        assertEquals("piano", testMeasure.getInstrument());
+        testMeasure.setInstrument("guitar");
+        assertEquals("guitar", testMeasure.getInstrument());
+        testSong.addMeasure(0,0,testMeasure);
+        assertEquals(0, testMeasure.getChannel());
+    }
+
+    @Test
+    public void testGetStringNotes() {
+        testMeasure.addNote(noteC);
+        testMeasure.addNote(noteD);
+        testMeasure.addNote(noteC);
+        assertEquals("C", testMeasure.getStringNotes()[0]);
+        assertEquals("D", testMeasure.getStringNotes()[1]);
+        assertEquals("C", testMeasure.getStringNotes()[2]);
+
     }
 }

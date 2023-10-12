@@ -21,6 +21,18 @@ public class NoteTest {
         assertEquals(600, noteC.getVelocity());
     }
 
+    @Test
+    public void testSetters() {
+        noteC.setPitch("D");
+        assertEquals("D", noteC.getPitch());
+
+        noteC.setDuration(250);
+        assertEquals(250, noteC.getDuration());
+
+        noteC.setVelocity(650);
+        assertEquals(650, noteC.getVelocity());
+    }
+
 
 
 }

@@ -34,6 +34,14 @@ public class Song {
 
     //Effects: Plays the song by sending each measure to the midi device
     //Modifies: this
+    public void pauseSong() {
+        this.playing = false;
+    }
+
+    public boolean getPlaying() {
+        return playing;
+    }
+
     public void playSong() {
         MidiPlayer midi = new MidiPlayer();
         this.playing = true;
@@ -65,10 +73,6 @@ public class Song {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void pauseSong() {
-        this.playing = false;
     }
 
 

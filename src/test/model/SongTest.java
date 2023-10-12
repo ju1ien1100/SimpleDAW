@@ -35,7 +35,11 @@ class SongTest {
         assertEquals(testMeasure, testSong.getMeasures()[0][1]);
     }
 
-
-
-
+    @Test
+    public void testPlayPauseSong() {
+        testSong.addMeasure(0,0, testMeasure);
+        assertFalse(testSong.getPlaying());
+        testSong.pauseSong();
+        assertFalse(testSong.getPlaying());
+    }
 }
