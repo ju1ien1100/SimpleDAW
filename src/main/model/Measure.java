@@ -18,6 +18,8 @@ public class Measure {
         this.ischord = false;
     }
 
+    //EFFECTS: adds note object to a measure
+    //MODIFIES: this
     public void addNote(Note note) {
         this.notes.add(note);
     }
@@ -34,6 +36,7 @@ public class Measure {
         }
     }
 
+    //EFFECTS:
     public void setIsChord() {
         ischord = true;
     }
@@ -57,6 +60,7 @@ public class Measure {
         this.channel = channel;
     }
 
+    //EFFECTS: getter
     public List<Note> getNotes() {
         return notes;
     }
@@ -72,11 +76,13 @@ public class Measure {
         return notes;
     }
 
-
+    //EFFECTS: getter
     public String getInstrument() {
         return instrument;
     }
 
+    //EFFECTS: setter
+    //MODIFIES: this
     public void setInstrument(String instrumentNew) {
         instrument = instrumentNew;
     }

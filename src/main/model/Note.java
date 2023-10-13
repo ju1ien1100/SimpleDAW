@@ -14,6 +14,8 @@ public class Note {
         this.velocity = velocity;
     }
 
+    //EFFECTS: These are the getters
+
     public String getPitch() {
         return pitch;
     }
@@ -25,6 +27,9 @@ public class Note {
     public int getVelocity() {
         return velocity;
     }
+
+    //EFFECTS: These are the setters
+    //MODIFIES: this
 
     public void setPitch(String pitch) {
         this.pitch = pitch;

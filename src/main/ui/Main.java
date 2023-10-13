@@ -20,7 +20,7 @@ public class Main {
     }
 
 
-
+    //EFFECTS: shows the menu of songs available to pick from
     private static void menu(Map<String, Song> songList) {
         System.out.println("MENU:");
         for (String key: songList.keySet()) {
@@ -31,6 +31,7 @@ public class Main {
 
     }
 
+    //EFFECTS: makes a new measure and adds it to the hashmap of measures, goes to populate measure
     public static void makeNewMeasure(Song userSong) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("What do you want to call this measure:");
@@ -51,6 +52,7 @@ public class Main {
         mainView(userSong);
     }
 
+    //EFFECTS: Allow users to edit a premade measure by changing a certain note
     public static void editMeasure() {
         System.out.println("Do you want to edit a measure? (yes/no)");
         System.out.println("...Remember this will change it everywhere!");
@@ -66,6 +68,7 @@ public class Main {
         }
     }
 
+    //EFFECTS: Menu which displays all the measures available
     private static Measure measureSelect(Map<String, Measure> measures) {
         System.out.println("Measures available:");
         for (String key: measures.keySet()) {
@@ -76,6 +79,7 @@ public class Main {
         return chosenMeasure;
     }
 
+    //EFFECTS: adds a new song to the menu of songs and adds the song to the hashmap of songs
     public static void initNewSong() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Amazing! Lets make a new song!");
@@ -86,6 +90,7 @@ public class Main {
         menu(songList);
     }
 
+    //EFFECTS: first entry point of the application which displays logo and waits for user to want to make a song
     public static void greet() {
         displayAsciiArt();
 
@@ -102,6 +107,7 @@ public class Main {
         }
     }
 
+    //EFFECTS: Checks if the user wants to make a new song or not, if not returns to song selection menu
     public static void displayer() {
 
         System.out.println("Want to make a new song?: (yes/no)");
@@ -119,7 +125,7 @@ public class Main {
 
 
 
-
+    //EFFECTS: plays the song and waits for user to enter pause before returning to main view
     public static void startSong(Song userSong) {
         Thread playThread = new Thread(() -> userSong.playSong());
         playThread.start();
@@ -137,6 +143,7 @@ public class Main {
         }
     }
 
+    //EFFECTS: asks if the user wants to make a new measure
     public static String checkMeasureNew() {
         System.out.println("Do you want to make a new measure: (yes/no)");
         Scanner scanner = new Scanner(System.in);
@@ -144,6 +151,7 @@ public class Main {
         return userResponse;
     }
 
+    //EFFECTS: checks if user is done editing song and returns to menu of song selection
     public static void doneWithSong() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Are you done with this song? (yes/no)");
@@ -154,6 +162,7 @@ public class Main {
         }
     }
 
+    //EFFECTS: enables user to add a premade measure into the song
     public static void addPreMadeMeasure(Song userSong) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Do you want to place a measure you have made? (yes/no)");
@@ -171,6 +180,7 @@ public class Main {
         return;
     }
 
+    //EFFECTS: changes the size of the array depending on the user inputs
     public static void editSong(Song userSong) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Do you want to edit the song/change the array (yes/no)");
@@ -190,6 +200,7 @@ public class Main {
         }
     }
 
+    //EFFECTS: main view to work on a song. Checks if you want to play then works on editing features of song
     public static void mainView(Song userSong) {
         viewSong(userSong);
 
@@ -213,6 +224,7 @@ public class Main {
         }
     }
 
+    //EFFECTS: Prints out the array which represents the song with the measures in the corresponding place
     private static void viewSong(Song userSong) {
         Measure[][] measures = userSong.getMeasures();
         System.out.println("Song:" + userSong.getName());
@@ -228,6 +240,7 @@ public class Main {
         }
     }
 
+    //EFFECTS: prints out all the notes in the measure and if it is a melody or chord
     private static void viewMeasure(Measure userMeasure) {
         String[] notes = userMeasure.getStringNotes();
         System.out.print("This measure has ");
@@ -242,6 +255,7 @@ public class Main {
         System.out.println();
     }
 
+    //EFFECTS: Determines if the measure should be a melody or a chord
     private static void melodyOrChord(Measure userMeasure) {
         System.out.println("Is this a chord:(yes/no)");
         Scanner scanner = new Scanner(System.in);
@@ -252,6 +266,7 @@ public class Main {
         }
     }
 
+    //EFFECTS: method to make a new note object
     private static Note populateNote() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("What note (i.e C, C#, D, D#,...");
@@ -266,6 +281,8 @@ public class Main {
 
         return newNote;
     }
+
+    //EFFECTS: method to add notes to measure and determine if it will be a chord or melody
 
     private static void populateMeasure(Measure userMeasure) {
         viewMeasure(userMeasure);
@@ -288,6 +305,7 @@ public class Main {
         }
     }
 
+    //EFFECTS: menu to select a song from premade songs
     private static Song songSelection() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("What song do you want to work on (type exact name)");
@@ -301,6 +319,7 @@ public class Main {
         }
     }
 
+    //EFFECTS: Menu to select a measure from premade measures
     private static Measure measureSelection() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("What measure do you want to work with (type exact name)");
@@ -332,14 +351,16 @@ public class Main {
         System.out.println();
     }
 
+    //EFFECTS: This is a timeout where the time is in milliseconds
     private static void timeOut(int time) {
         try {
-            Thread.sleep(time);  // Sleep for 500 milliseconds (0.5 seconds)
+            Thread.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+    //EFFECTS: this displays some instruments which can be used
     public static void showInstruments() {
         System.out.println("What instrument do you want:");
         System.out.println("-piano");

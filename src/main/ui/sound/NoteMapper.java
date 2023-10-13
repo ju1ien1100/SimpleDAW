@@ -23,6 +23,7 @@ public class NoteMapper {
     };
 
     //Note: returns C if not found
+    //EFFECTS: returns the note value coresponding to the char representation of the note
     public static int getNoteValue(String note) {
         return NOTE_VALUES.getOrDefault(note, 60);
     }

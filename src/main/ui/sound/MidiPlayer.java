@@ -4,9 +4,12 @@ import model.*;
 import javax.sound.midi.*;
 import java.util.List;
 
+//All information about midi class from:
+// https://docs.oracle.com/javase%2Ftutorial%2F/sound/overview-MIDI.html
+// and linked pages
 
 //NOTE that this was derived from the midiplayer presented to students
-// from the course content
+// from the course content however it has been more abstracted to more functionality
 public class MidiPlayer {
     private Synthesizer synth;
     private MidiChannel[] channels;
@@ -34,14 +37,13 @@ public class MidiPlayer {
         for (Instrument instrument : instruments) {
             if (instrument.getName().toLowerCase().contains(instrumentName.toLowerCase())) {
                 synth.loadInstrument(instrument);
-                //channels[0].programChange(instrument.getPatch().getProgram());
                 return instrument.getPatch().getProgram();
             }
         }
         return 0;
     }
 
-    //REQUIRES: a positive trackChannel, a valid instrument, non null list of Notes
+    //REQUIRES: a positive trackChannel
     //EFFECT: Handles the playing and stoping of a melody for a given instrument
     public void playNotes(int trackChannel, String instrumentName, List<Note> melody) {
         channels[trackChannel].programChange(selectInstrument(instrumentName));
@@ -58,6 +60,8 @@ public class MidiPlayer {
         }
     }
 
+    //REQUIRES: a positive trackChannel
+    //EFFECT: Handles the playing and stoping of a chord for a given instrument
     public void playChord(int trackChannel, String instrumentName, List<Note> notes) {
         channels[trackChannel].programChange(selectInstrument(instrumentName));
 
@@ -66,7 +70,7 @@ public class MidiPlayer {
         }
 
         try {
-            Thread.sleep(notes.get(0).getDuration());  // assuming getDuration returns time in milliseconds
+            Thread.sleep(notes.get(0).getDuration());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -76,6 +80,7 @@ public class MidiPlayer {
         }
     }
 
+    //EFFECTS: closes the synth
     public void close() {
         synth.close();
     }

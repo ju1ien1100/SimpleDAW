@@ -14,8 +14,9 @@ public class Song {
     private boolean playing = false;
     private String name;
 
-    //EFFECTS: constructs a new song object with a 8*5 array of measures
-    //NOTE: Later versions will abstract this to be an arbitrary sized array, but makes command line hard to interpret
+    //EFFECTS: constructs a new song object with a default 5*8 array of Measure
+    //NOTE: bpm will have to be used for GUI to create ticks of the element to display and contribute to a more
+    // sophisticated Midi in the future
     public Song(String name) {
         this.measures = new Measure[DEFAULT_NUMTRACKS][DEFAULT_NUMMEASURE];
         this.bpm = 120;
@@ -23,6 +24,7 @@ public class Song {
 
     }
 
+    //EFFECTS: getter
     public String getName() {
         return name;
     }
@@ -35,6 +37,7 @@ public class Song {
         measure.setChannel(trackIndex);
     }
 
+    //EFFECTS: getter
     public Measure[][] getMeasures() {
         return measures;
     }
@@ -45,10 +48,13 @@ public class Song {
         this.playing = false;
     }
 
+    //EFFECTS: getter
     public boolean getPlaying() {
         return playing;
     }
 
+    //EFFECTS: creates a new 2d array with one more row and then copies the current 2d array values in
+    //Modifies: this
     public void addTrack() {
         Measure[][] newMeasure = new Measure[measures.length + 1][measures[0].length];
         for (int i = 0; i < measures.length; i++) {
@@ -59,6 +65,8 @@ public class Song {
         measures = newMeasure;
     }
 
+    //EFFECTS: creates a new 2d array with one more column and then coppies current 2d array values in
+    //MODIFIES: this
     public void addMeasureColumn() {
         Measure[][] newMeasure = new Measure[measures.length][measures[0].length + 1];
         for (int i = 0; i < measures.length; i++) {
@@ -70,13 +78,17 @@ public class Song {
     }
 
 
-//PLEASE NOTE: These should be methods for the song class but they were moved to main because
-    //         the tests for coverage were failing in jacoco.
+//PLEASE NOTE: A TA told me to move playSong() and related functions to main, however,
+    //         I didn't think this would properly reflect the Song class so I decided
+    //         to keep it here.
+
 
     //EFFECTS: Sends the measure data to the midi player (access external hardware)
     public void startMeasure(List<Thread> threads, Measure measure) {
         MidiPlayer midi = new MidiPlayer();
         if (measure.getIsChord()) {
+            //EFFECT: Creates a new thread object to run midi devices for different instruments in parallel
+            //Lambda function
             Thread thread = new Thread(() -> {
                 midi.playChord(measure.getChannel(), measure.getInstrument(), measure.getNotes());
             });
@@ -111,6 +123,11 @@ public class Song {
     }
 
     //Effects: waits for threads to finish compiling and then plays at the same time
+    // Note: I got the idea to use threads from:
+    // https://stackoverflow.com/questions/18162863/how-to-run-different-methods-parallely
+    // I recognized the Thread from the midiPlayer provided in class and decided
+    // that it would the best way to approach synchronous playback of different midi channels
+    // because the author said it was what should be used before more complex methods.
     private void synchronizeThreads(List<Thread> threads) {
         for (Thread thread : threads) {
             try {
