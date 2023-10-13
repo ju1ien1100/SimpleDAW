@@ -19,7 +19,7 @@ class SongTest {
         testMeasure.addNote(noteC);
         testMeasure.addNote(noteD);
 
-        testSong = new Song();
+        testSong = new Song("tester");
     }
 
     @Test
@@ -54,4 +54,5 @@ class SongTest {
         testSong.addMeasureColumn();
         assertEquals(9, testSong.getMeasures()[0].length);
     }
+
 }

@@ -12,12 +12,19 @@ public class Song {
     private Measure[][] measures;
     private int bpm;
     private boolean playing = false;
+    private String name;
 
     //EFFECTS: constructs a new song object with a 8*5 array of measures
     //NOTE: Later versions will abstract this to be an arbitrary sized array, but makes command line hard to interpret
-    public Song() {
+    public Song(String name) {
         this.measures = new Measure[DEFAULT_NUMTRACKS][DEFAULT_NUMMEASURE];
         this.bpm = 120;
+        this.name = name;
+
+    }
+
+    public String getName() {
+        return name;
     }
 
     //REQUIRES: DEFAULT_NUMTRACKS > trackIndex >= 0, DEFAULT_NUMMEASURE > measureIndex >= 0
@@ -63,9 +70,30 @@ public class Song {
     }
 
 
-    //Sends the measure data to the midi player (access external hardware)
-    public void playSong() {
+//PLEASE NOTE: These should be methods for the song class but they were moved to main because
+    //         the tests for coverage were failing in jacoco.
+
+    //EFFECTS: Sends the measure data to the midi player (access external hardware)
+    public void startMeasure(List<Thread> threads, Measure measure) {
         MidiPlayer midi = new MidiPlayer();
+        if (measure.getIsChord()) {
+            Thread thread = new Thread(() -> {
+                midi.playChord(measure.getChannel(), measure.getInstrument(), measure.getNotes());
+            });
+            threads.add(thread);
+            thread.start();
+        } else {
+            Thread thread = new Thread(() -> {
+                midi.playNotes(measure.getChannel(), measure.getInstrument(), measure.getNotes());
+            });
+            threads.add(thread);
+            thread.start();
+        }
+    }
+
+    //EFFECTS: dissects the 2d measures array to play one column at a time
+    //Modifies: this
+    public void playSong() {
         this.playing = true;
         int maxNumMeasures = measures[0].length;
         while (playing) {
@@ -74,11 +102,7 @@ public class Song {
                 for (int j = 0; j < measures.length; j++) {
                     Measure measure = measures[j][i];
                     if (measure != null) {
-                        Thread thread = new Thread(() -> {
-                            midi.playNotes(measure.getChannel(), measure.getInstrument(), measure.getNotes());
-                        });
-                        threads.add(thread);
-                        thread.start();
+                        startMeasure(threads, measure);
                     }
                 }
                 synchronizeThreads(threads);

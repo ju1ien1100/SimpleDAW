@@ -30,17 +30,17 @@ adding notes to those measures. In the aims to be education it will also come wi
 and indicators of what should be done/ can be done. 
 
 ## User Stories
-- As a user, I want to be able to play and hear audio files
-- As a user, I want to be able to make different song
-- As a user, I want to be able to make different tracks/measures in a song
-- As a user, I want to be able to edit the tracks/measures in a song
-- As a user, I want to be able to add different instruments to a song
-- As a user, I want to be able to create melodies from notes
-- As a user, I want to be able to create chords from notes
-- As a user, I want to be able to create an outputted file of my song
-- As a user, I want to be able to add audio files to my songs
-- As a user, I want to be able to view the different tracks/measures in my song
-- As a user, I want to be able to edit the different tracks/measures
-- As a user, I want to be able to control audio features with viewable inputs
+- As a user, I want to be able to play and hear audio files (yes)
+- As a user, I want to be able to make different song (yes)
+- As a user, I want to be able to make different tracks/measures in a song (yes)
+- As a user, I want to be able to edit the tracks/measures in a song (yes)
+- As a user, I want to be able to add different instruments to a song (yes)
+- As a user, I want to be able to create melodies from notes (yes)
+- As a user, I want to be able to create chords from notes (yes)
+- As a user, I want to be able to output file of my song (Not yet, won't work with more hardware for jacoco report)
+- As a user, I want to be able to add audio files to my songs (needs dependencies)
+- As a user, I want to be able to view the different tracks/measures in my song (yes)
+- As a user, I want to be able to edit the different tracks/measures (yes)
+- As a user, I want to be able to control audio features with viewable inputs (yes)
 
 

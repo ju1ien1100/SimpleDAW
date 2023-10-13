@@ -7,6 +7,7 @@ public class Measure {
     private List<Note> notes;
     private String instrument;
     private int channel;
+    private boolean ischord;
 
     //Requires: A valid instrument name
     //Effects: constructs a new measure with an empty list of notes, the instrument and leaves channel to be set
@@ -14,6 +15,7 @@ public class Measure {
         this.notes = new ArrayList<>();
         this.instrument = instrument;
         this.channel = -69;
+        this.ischord = false;
     }
 
     public void addNote(Note note) {
@@ -30,6 +32,18 @@ public class Measure {
             this.notes.add(index, note);
             return true;
         }
+    }
+
+    public void setIsChord() {
+        ischord = true;
+    }
+
+    public void setIsNotChord() {
+        ischord = false;
+    }
+
+    public boolean getIsChord() {
+        return ischord;
     }
 
 

@@ -17,7 +17,7 @@ public class MeasureTest {
         testMeasure = new Measure("piano");
         noteC = new Note("C", 1000, 600);
         noteD = new Note("D", 1000, 600);
-        testSong = new Song();
+        testSong = new Song("tester");
     }
 
     @Test
@@ -66,6 +66,12 @@ public class MeasureTest {
         assertEquals("C", testMeasure.getStringNotes()[0]);
         assertEquals("D", testMeasure.getStringNotes()[1]);
         assertEquals("C", testMeasure.getStringNotes()[2]);
+    }
 
+    @Test
+    public void testIsChord() {
+        assertFalse(testMeasure.getIsChord());
+        testMeasure.setIsChord();
+        assertTrue(testMeasure.getIsChord());
     }
 }

@@ -26,6 +26,7 @@ public class MidiPlayer {
         }
     }
 
+    //Note: default is piano
     //REQUIRES: the name of a real instrument
     //MODIFIES: synth
     //EFFECTS: loads and saves an instrument into the synth if valid, returns the int representation of instrument
@@ -37,7 +38,7 @@ public class MidiPlayer {
                 return instrument.getPatch().getProgram();
             }
         }
-        return -69;
+        return 0;
     }
 
     //REQUIRES: a positive trackChannel, a valid instrument, non null list of Notes
@@ -64,11 +65,15 @@ public class MidiPlayer {
             channels[trackChannel].noteOn(NoteMapper.getNoteValue(note.getPitch()), note.getVelocity());
         }
 
+        try {
+            Thread.sleep(notes.get(0).getDuration());  // assuming getDuration returns time in milliseconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         for (Note note : notes) {
             channels[trackChannel].noteOff(NoteMapper.getNoteValue(note.getPitch()));
         }
-
-
     }
 
     public void close() {
