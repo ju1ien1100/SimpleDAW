@@ -1,0 +1,73 @@
+{"Test": {
+    "name": "TestSong",
+    "playing": false,
+    "bpm": 120,
+    "tracks": [
+        [
+            {
+                "notes": [
+                    {
+                        "duration": 1000,
+                        "pitch": "C",
+                        "velocity": 600
+                    },
+                    {
+                        "duration": 1000,
+                        "pitch": "D",
+                        "velocity": 600
+                    }
+                ],
+                "channel": 0,
+                "instrument": "piano",
+                "isChord": false
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ]
+    ]
+}}
