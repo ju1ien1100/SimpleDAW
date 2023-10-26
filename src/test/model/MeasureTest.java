@@ -73,5 +73,7 @@ public class MeasureTest {
         assertFalse(testMeasure.getIsChord());
         testMeasure.setIsChord();
         assertTrue(testMeasure.getIsChord());
+        testMeasure.setIsNotChord();
+        assertFalse(testMeasure.getIsChord());
     }
 }
