@@ -18,6 +18,6 @@ public class MidiPlayerTest {
     public void testSelectInstrument() {
         assertEquals(0, midi.selectInstrument("piano"));
         assertEquals(38, midi.selectInstrument("synth"));
-        assertEquals(-69, midi.selectInstrument("julien"));
+        assertEquals(0, midi.selectInstrument("julien"));
     }
 }

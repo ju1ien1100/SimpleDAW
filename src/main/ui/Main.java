@@ -2,7 +2,13 @@ package ui;
 
 import model.*;
 import model.Measure;
+import org.json.JSONException;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 import ui.sound.MidiPlayer;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -11,24 +17,63 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-
+    private static final String JSON_STORE = "./data/songList.json";
     private static Map<String, Song> songList = new HashMap<String, Song>() {};
-    private static Map<String, Measure> measureMap = new HashMap<String, Measure>() {};
+    private static HashMap<String, Measure> measureMap = new HashMap<String, Measure>() {};
+    private static JsonWriter jsonWriter;
+    private static JsonReader jsonReader;
 
     public static void main(String[] args) {
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         greet();
     }
 
+    private static void displayOptions() {
+        System.out.println("MENU:");
+        System.out.println("1 - Pick a song to work on");
+        System.out.println("2 - Save current work to file");
+        System.out.println("3 - Load previous work from file");
+        System.out.println("4 - Exit");
+    }
+
+    //EFFECTS: menu to choose between writing to JSON or working on a song
+    private static void menu(Map<String, Song> songList) {
+        displayOptions();
+        Scanner scanner = new Scanner(System.in);
+        String option = scanner.nextLine();
+        switch (option) {
+            case "1":
+                chooseSongToWorkOn(songList);
+                break;
+            case "2":
+                saveSongList();
+                break;
+            case "3":
+                loadSongList();
+                break;
+            case "4":
+                System.out.println("Goodbye!");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Invalid option, please enter a number between 1 and 4");
+                menu(songList);
+        }
+    }
 
     //EFFECTS: shows the menu of songs available to pick from
-    private static void menu(Map<String, Song> songList) {
-        System.out.println("MENU:");
-        for (String key: songList.keySet()) {
+    private static void chooseSongToWorkOn(Map<String, Song> songList) {
+        System.out.println("Available Songs:");
+        for (String key : songList.keySet()) {
             System.out.println(key);
         }
         Song chosenSong = songSelection();
-        mainView(chosenSong);
-
+        if (chosenSong != null) {
+            mainView(chosenSong);
+        } else {
+            menu(songList);
+        }
     }
 
     //EFFECTS: makes a new measure and adds it to the hashmap of measures, goes to populate measure
@@ -92,20 +137,31 @@ public class Main {
 
     //EFFECTS: first entry point of the application which displays logo and waits for user to want to make a song
     public static void greet() {
-        displayAsciiArt();
+        AsciiArt.displayAsciiArt();
 
-        System.out.println("Ready to make some music: (yes/no)");
+        System.out.println("Ready to make some music or load previous work? (make/load/exit):");
 
         Scanner scanner = new Scanner(System.in);
         String userResponse = scanner.nextLine().toLowerCase();
 
-        if (userResponse.equals("yes")) {
-            initNewSong();
-        } else {
-            System.out.println("Okay...we'll be waiting");
-            greet();
+        switch (userResponse) {
+            case "make":
+                initNewSong();
+                break;
+            case "load":
+                loadSongList();
+                break;
+            case "exit":
+                System.out.println("Goodbye!");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Invalid option, please enter 'make', 'load', or 'exit'");
+                greet();
         }
     }
+
+
 
     //EFFECTS: Checks if the user wants to make a new song or not, if not returns to song selection menu
     public static void displayer() {
@@ -121,6 +177,31 @@ public class Main {
             System.out.println("Okay...we'll be waiting");
             menu(songList);
         }
+    }
+
+    //EFFECTS: saves the song list to file
+    private static void saveSongList() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(songList);
+            jsonWriter.close();
+            System.out.println("Saved song list to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+        menu(songList);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads song list from file
+    private static void loadSongList() {
+        try {
+            songList = jsonReader.read();
+            System.out.println("Loaded song list from " + JSON_STORE);
+        } catch (IOException | JSONException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+        menu(songList);
     }
 
 
@@ -333,32 +414,6 @@ public class Main {
         }
     }
 
-
-    //EFFECTS: Makes my logo for FLJuJu in the command
-    private static void displayAsciiArt() {
-        System.out.println("  ______ _          _            _       ");
-        timeOut(400);
-        System.out.println(" |  ____| |        | |          | |      ");
-        timeOut(300);
-        System.out.println(" | |__  | |        | |_   _     | |_   _ ");
-        timeOut(300);
-        System.out.println(" |  __| | |    _   | | | | |_   | | | | |");
-        timeOut(300);
-        System.out.println(" | |    | |___| |__| | |_| | |__| | |_| |");
-        timeOut(300);
-        System.out.println(" |_|    |______\\____/ \\__,_|\\____/ \\__,_|");
-        System.out.println();
-        System.out.println();
-    }
-
-    //EFFECTS: This is a timeout where the time is in milliseconds
-    private static void timeOut(int time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     //EFFECTS: this displays some instruments which can be used
     public static void showInstruments() {

@@ -2,10 +2,12 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 import ui.sound.MidiPlayer;
 
-public class Song {
+public class Song implements Writable {
     private static int DEFAULT_NUMTRACKS = 5;
     private static int DEFAULT_NUMMEASURE = 8;
 
@@ -51,6 +53,10 @@ public class Song {
     //EFFECTS: getter
     public boolean getPlaying() {
         return playing;
+    }
+
+    public void setBpm(int bpm) {
+        this.bpm = bpm;
     }
 
     //EFFECTS: creates a new 2d array with one more row and then copies the current 2d array values in
@@ -139,5 +145,27 @@ public class Song {
     }
 
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("bpm", bpm);
+        json.put("playing", playing);
 
+        JSONArray tracksArray = new JSONArray();
+        for (Measure[] track : measures) {
+            JSONArray measureArray = new JSONArray();
+            for (Measure measure : track) {
+                if (measure != null) {
+                    measureArray.put(measure.toJson());
+                } else {
+                    measureArray.put(JSONObject.NULL);
+                }
+            }
+            tracksArray.put(measureArray);
+        }
+        json.put("tracks", tracksArray);
+
+        return json;
+    }
 }

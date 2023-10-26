@@ -1,7 +1,12 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.JsonReader;
+import persistence.Writable;
+
 //Note this is a data abstraction for ease of design
-public class Note {
+public class Note implements Writable {
     private String pitch;
     private long duration;
     private int velocity;
@@ -41,5 +46,14 @@ public class Note {
 
     public void setVelocity(int velocity) {
         this.velocity = velocity;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("pitch", pitch);
+        json.put("duration", duration);
+        json.put("velocity", velocity);
+        return json;
     }
 }

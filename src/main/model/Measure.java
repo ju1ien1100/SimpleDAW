@@ -1,9 +1,13 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Measure {
+public class Measure implements Writable {
     private List<Note> notes;
     private String instrument;
     private int channel;
@@ -87,4 +91,19 @@ public class Measure {
         instrument = instrumentNew;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("instrument", instrument);
+        json.put("channel", channel);
+        json.put("isChord", ischord);
+
+        JSONArray notesArray = new JSONArray();
+        for (Note note : notes) {
+            notesArray.put(note.toJson());
+        }
+        json.put("notes", notesArray);
+
+        return json;
+    }
 }
