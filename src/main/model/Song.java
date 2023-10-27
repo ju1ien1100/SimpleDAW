@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import persistence.Writable;
 import ui.sound.MidiPlayer;
 
+
+// A class which represents a song, a 2d array of sounds
 public class Song implements Writable {
     private static int DEFAULT_NUMTRACKS = 5;
     private static int DEFAULT_NUMMEASURE = 8;

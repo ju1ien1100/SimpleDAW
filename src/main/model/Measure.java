@@ -7,6 +7,8 @@ import persistence.Writable;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// A class representing a measure, a 1d array of sounds
 public class Measure implements Writable {
     private List<Note> notes;
     private String instrument;

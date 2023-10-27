@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import org.json.*;
 
+// A class to read a json representation of a song and turn it into a song class
 public class JsonReader {
     private String source;
 

@@ -4,9 +4,11 @@ import model.*;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.util.HashMap;
+
 import java.util.Map;
 
+
+// A class to write a song class and subsequent classes to a json file
 public class JsonWriter {
     private static final int TAB = 4;
     private String destination;
