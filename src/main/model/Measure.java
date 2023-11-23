@@ -60,6 +60,8 @@ public class Measure implements Writable {
         return channel;
     }
 
+
+
     //MODIFIES: this
     //EFFECTS: sets the channel of the measure
     public void setChannel(int channel) {
@@ -93,6 +95,17 @@ public class Measure implements Writable {
         instrument = instrumentNew;
     }
 
+    //EFFECTS: returns the total duration of the measure
+    public long getDuration() {
+        long duration = 0;
+        for (Note note: notes) {
+            duration += note.getDuration();
+        }
+
+        return duration;
+    }
+
+    //EFFECTS: turns this to a json object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

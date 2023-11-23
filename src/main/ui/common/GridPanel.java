@@ -1,0 +1,42 @@
+package ui.common;
+
+import model.Measure;
+import model.Song;
+import ui.common.SoundBox;
+import persistence.JsonReader;
+import persistence.JsonWriter;
+
+import java.util.Random;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
+import java.util.List;
+
+public class GridPanel extends JPanel {
+    private int rows;
+    private int columns;
+    private int cellWidth;
+    private int cellHeight;
+
+    public GridPanel(int rows, int columns, int cellWidth, int cellHeight) {
+        this.rows = rows;
+        this.columns = columns;
+        this.cellWidth = cellWidth;
+        this.cellHeight = cellHeight;
+        setOpaque(false);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                int x = j * cellWidth;
+                int y = i * cellHeight;
+                g.drawRect(x, y, cellWidth, cellHeight);
+            }
+        }
+    }
+}

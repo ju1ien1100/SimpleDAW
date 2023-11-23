@@ -1,99 +1,320 @@
-{"TestSong": {
-    "name": "TestSong",
-    "playing": false,
-    "bpm": 120,
-    "tracks": [
-        [
-            {
-                "notes": [
-                    {
-                        "duration": 1000,
-                        "pitch": "C",
-                        "velocity": 600
-                    },
-                    {
-                        "duration": 500,
-                        "pitch": "D",
-                        "velocity": 600
-                    },
-                    {
-                        "duration": 500,
-                        "pitch": "F",
-                        "velocity": 600
-                    }
-                ],
-                "channel": 0,
-                "instrument": "piano",
-                "isChord": false
-            },
-            {
-                "notes": [
-                    {
-                        "duration": 1000,
-                        "pitch": "C",
-                        "velocity": 600
-                    },
-                    {
-                        "duration": 500,
-                        "pitch": "D",
-                        "velocity": 600
-                    },
-                    {
-                        "duration": 500,
-                        "pitch": "F",
-                        "velocity": 600
-                    }
-                ],
-                "channel": 0,
-                "instrument": "piano",
-                "isChord": false
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        ],
-        [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        ],
-        [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        ],
-        [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        ],
-        [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+{
+    "TestSong": {
+        "name": "TestSong",
+        "playing": false,
+        "bpm": 120,
+        "tracks": [
+            [
+                {
+                    "notes": [
+                        {
+                            "duration": 1000,
+                            "pitch": "C",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 1000,
+                            "pitch": "D",
+                            "velocity": 600
+                        }
+                    ],
+                    "channel": 0,
+                    "instrument": "piano",
+                    "isChord": false
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                {
+                    "notes": [
+                        {
+                            "duration": 250,
+                            "pitch": "C",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 250,
+                            "pitch": "D",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 250,
+                            "pitch": "F",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 250,
+                            "pitch": "E",
+                            "velocity": 600
+                        }
+                    ],
+                    "channel": 1,
+                    "instrument": "violin",
+                    "isChord": false
+                },
+                null,
+                null,
+                {
+                    "notes": [
+                        {
+                            "duration": 250,
+                            "pitch": "C",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 250,
+                            "pitch": "D",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 250,
+                            "pitch": "F",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 250,
+                            "pitch": "E",
+                            "velocity": 600
+                        }
+                    ],
+                    "channel": 1,
+                    "instrument": "violin",
+                    "isChord": false
+                },
+                null
+            ],
+            [
+                {
+                    "notes": [
+                        {
+                            "duration": 1000,
+                            "pitch": "G",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 1,
+                            "pitch": "E",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 1,
+                            "pitch": "C",
+                            "velocity": 600
+                        }
+                    ],
+                    "channel": 2,
+                    "instrument": "synth",
+                    "isChord": true
+                },
+                null,
+                null,
+                null,
+                null,
+                {
+                    "notes": [
+                        {
+                            "duration": 1000,
+                            "pitch": "G",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 1,
+                            "pitch": "E",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 1,
+                            "pitch": "C",
+                            "velocity": 600
+                        }
+                    ],
+                    "channel": 2,
+                    "instrument": "synth",
+                    "isChord": true
+                },
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                {
+                    "notes": [
+                        {
+                            "duration": 333,
+                            "pitch": "B",
+                            "velocity": 540
+                        },
+                        {
+                            "duration": 333,
+                            "pitch": "D",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 333,
+                            "pitch": "F#",
+                            "velocity": 400
+                        }
+                    ],
+                    "channel": 3,
+                    "instrument": "organ",
+                    "isChord": false
+                },
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ]
         ]
-    ]
-}}
+    },
+    "TestNewSong": {
+        "name": "TestNewSong",
+        "playing": false,
+        "bpm": 120,
+        "tracks": [
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ]
+        ]
+    },
+    "TestOwen": {
+        "name": "TestOwen",
+        "playing": false,
+        "bpm": 120,
+        "tracks": [
+            [
+                {
+                    "notes": [
+                        {
+                            "duration": 1000,
+                            "pitch": "A",
+                            "velocity": 600
+                        },
+                        {
+                            "duration": 1000,
+                            "pitch": "C",
+                            "velocity": 600
+                        }
+                    ],
+                    "channel": 0,
+                    "instrument": "organ",
+                    "isChord": false
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ]
+        ]
+    }
+}

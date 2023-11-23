@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class NoteMapper {
 
-    private static final Map<String, Integer> NOTE_VALUES = new HashMap<String, Integer>() {
+    public static final Map<String, Integer> NOTE_VALUES = new HashMap<String, Integer>() {
         {
             put("C", 60);
             put("C#", 61);

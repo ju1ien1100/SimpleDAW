@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -57,8 +58,13 @@ public class Song implements Writable {
         return playing;
     }
 
+
     public void setBpm(int bpm) {
         this.bpm = bpm;
+    }
+
+    public void removeMeasure(int trackIndex, int measureIndex) {
+        measures[trackIndex][measureIndex] = null;
     }
 
     //EFFECTS: creates a new 2d array with one more row and then copies the current 2d array values in
@@ -146,7 +152,32 @@ public class Song implements Writable {
         }
     }
 
+    //EFFECTS: populates the measure map
+    public HashMap<String, List<Measure>> populateMeasures() {
+        HashMap<String, List<Measure>> measureMap = new HashMap<String, List<Measure>>();
+        for (int i = 0; i < measures.length; i++) {
+            for (int j = 0; j < measures[0].length; j++) {
+                Measure measure = measures[i][j];
+                if (measure != null) {
+                    String instrument = measure.getInstrument();
+                    if (measureMap.containsKey(measure.getInstrument())) {
+                        List<Measure> instrumentMeasures = measureMap.get(instrument);
+                        instrumentMeasures.add(measure);
+                        measureMap.put(instrument, instrumentMeasures);
+                    } else {
+                        List<Measure> newMeasures = new ArrayList<>();
+                        newMeasures.add(measure);
+                        measureMap.put(instrument, newMeasures);
+                    }
+                }
+            }
+        }
 
+        return measureMap;
+    }
+
+
+    //Effects: converts the song to a JSON file
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
