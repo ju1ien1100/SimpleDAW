@@ -3,7 +3,7 @@ package ui.common;
 import javax.swing.*;
 import java.awt.*;
 
-
+//A panel in the grid of the trackBasket
 public class GridPanel extends JPanel {
     private int rows;
     private int columns;
@@ -18,6 +18,8 @@ public class GridPanel extends JPanel {
         setOpaque(false);
     }
 
+
+    //Properly makes grid
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

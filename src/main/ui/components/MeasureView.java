@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+//A class to make measures
 public class MeasureView extends  JDialog {
 
 
@@ -26,6 +27,7 @@ public class MeasureView extends  JDialog {
         initializeUI();
     }
 
+    //makes the UI of the notes and the buttons
     private void initializeUI() {
         setLayout(new BorderLayout());
 
@@ -48,6 +50,7 @@ public class MeasureView extends  JDialog {
         setSize(750, 300);
     }
 
+    //EFFECTS: action for adding a note
     private void addNoteAction(String noteName) {
         String durationStr = JOptionPane.showInputDialog("Enter duration for " + noteName + ":");
         String velocityStr = JOptionPane.showInputDialog("Enter velocity for " + noteName + ":");
@@ -63,6 +66,8 @@ public class MeasureView extends  JDialog {
         }
     }
 
+    //EFFECTS: Finishing the measure by selecting instrument and adding
+    // to measureBasket()
     private Measure finalizeMeasure() {
 
         String[] instruments = {"piano", "violin", "organ", "synth"};
@@ -82,20 +87,13 @@ public class MeasureView extends  JDialog {
             for (Note note: notesInMeasure) {
                 measure.addNote(note);
             }
-
             if (creationListener != null) {
                 creationListener.onMeasureCreated(measure);
             }
-
             dispose();
-
             return measure;
 
-
-
         }
-
-
 
         setVisible(false);
         return null;

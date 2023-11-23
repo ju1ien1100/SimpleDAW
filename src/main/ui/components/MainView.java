@@ -37,30 +37,13 @@ public class MainView extends Screen {
 
     public MainView(Song song, Map<String, Song> songList) {
         super();
-
-        this.song = song;
-        this.measureMap = song.populateMeasures();
-        this.colorMap = new HashMap<String, Color>();
-        layeredPane = new JLayeredPane();
-        this.songList = songList;
-        //Measures Display
-        jsonWriter = new JsonWriter(JSON_STORE);
-
-
-        //Header Stuff
-        JPanel header = header();
-
-
+        initializeFields(song, songList);
 
 
         mainFrame.setSize(800, 600);
 
-        int headerHeight = (int)(mainFrame.getHeight() * 0.1);
-        mainFrame.add(header, BorderLayout.NORTH);
-        header.setPreferredSize(new Dimension(mainFrame.getWidth(), headerHeight));
-
-        measureBasket();
-
+        setupHeader();
+        setupMeasureBaskets();
 
         int trackBasketHeight = (int)(mainFrame.getHeight() * 0.5);
         int gridWidth = mainFrame.getWidth() / song.getMeasures()[0].length;
@@ -88,6 +71,17 @@ public class MainView extends Screen {
 
     }
 
+    // EFFECTS: Initializes fields of MainView with given song and songList
+    private void initializeFields(Song song, Map<String, Song> songList) {
+        this.song = song;
+        this.measureMap = song.populateMeasures();
+        this.colorMap = new HashMap<>();
+        this.songList = songList;
+        this.jsonWriter = new JsonWriter(JSON_STORE);
+        this.layeredPane = new JLayeredPane();
+    }
+
+    @SuppressWarnings("methodlength")
     public void makeSoundBoxDraggable(MeasureBox measureBox, int trackIndex, int measureIndex) {
         MouseAdapter ma = new MouseAdapter() {
             Point initialLocation;
@@ -156,6 +150,7 @@ public class MainView extends Screen {
         measureBox.getBoxPanel().addMouseMotionListener(ma);
     }
 
+    @SuppressWarnings("methodlength")
     public void makeMeasureBoxDraggable(MeasureBox measureBox) {
         MouseAdapter ma = new MouseAdapter() {
             Point initialLocation;
@@ -242,40 +237,43 @@ public class MainView extends Screen {
     }
 
 
-    public void measureBasket() {
-        List<String> instruments = new ArrayList<String>(measureMap.keySet());
-         // Set the layout to null for absolute positioning
-
+    private void setupMeasureBaskets() {
+        List<String> instruments = new ArrayList<>(measureMap.keySet());
         int positionY = (int) (mainFrame.getHeight() * 0.5);
         int positionX = 0;
         int height = (int) (mainFrame.getHeight() * 0.5) / song.getMeasures().length;
+
         for (String instrument : instruments) {
-            List<Measure> measures = measureMap.get(instrument);
             Color color = getRandomBrightColor();
             colorMap.put(instrument, color);
-
-            for (int i = 0; i < measures.size(); i++) {
-                Measure measure = measures.get(i);
-                int duration = (int) measure.getDuration() / 10;
-                MeasureBox measureBox = new MeasureBox(duration, height, color, measure);
-                makeMeasureBoxDraggable(measureBox);
-                JPanel boxPanel = measureBox.getBoxPanel();
-                boxPanel.setBounds(positionX, positionY, duration, height);
-                layeredPane.add(boxPanel, MEASURE_BOX_LAYER - 1);
-
-                if (positionX + duration >= mainFrame.getWidth()) {
-                    positionY += height;
-                    positionX = 0;
-                } else {
-                    positionX += duration;
-                }
-            }
-
+            positionX = processMeasures(measureMap.get(instrument), positionX, positionY, height, color);
         }
         layeredPane.revalidate();
         layeredPane.repaint();
-
     }
+
+    private int processMeasures(List<Measure> measures, int positionX, int positionY, int height, Color color) {
+        for (Measure measure : measures) {
+            int duration = (int) measure.getDuration() / 10;
+            positionX = addMeasureBox(measure, duration, height, color, positionX, positionY);
+        }
+        return positionX;
+    }
+
+    private int addMeasureBox(Measure measure, int duration, int height, Color color, int positionX, int positionY) {
+        MeasureBox measureBox = new MeasureBox(duration, height, color, measure);
+        makeMeasureBoxDraggable(measureBox);
+        JPanel boxPanel = measureBox.getBoxPanel();
+        boxPanel.setBounds(positionX, positionY, duration, height);
+        layeredPane.add(boxPanel, MEASURE_BOX_LAYER - 1);
+
+        if (positionX + duration >= mainFrame.getWidth()) {
+            return 0;
+        } else {
+            return positionX + duration;
+        }
+    }
+
 
     //EFFECTS gets a random bright color
     public Color getRandomBrightColor() {
@@ -289,99 +287,75 @@ public class MainView extends Screen {
         return new Color(red, green, blue);
     }
 
+    // EFFECTS: Sets up the header of the main view
+    private void setupHeader() {
+        JPanel header = header();
+        int headerHeight = (int)(mainFrame.getHeight() * 0.1);
+        header.setPreferredSize(new Dimension(mainFrame.getWidth(), headerHeight));
+        mainFrame.add(header, BorderLayout.NORTH);
+    }
 
-    //EFFECTS: Creates the JPanel for the Header
+    // EFFECTS: Creates the JPanel for the Header
     public JPanel header() {
-        //Header stuff
         JPanel header = new JPanel(new GridLayout(1, 5));
-
-        JRadioButton saveButton = new JRadioButton("Save");
-        JRadioButton exitButton = new JRadioButton("Exit");
-        JRadioButton playButton = new JRadioButton("Play");
-        JRadioButton pauseButton = new JRadioButton("Pause");
-        JRadioButton newMeasureButton = new JRadioButton("New");
-
         Color backgroundColor = new Color(193, 239, 172, 190);
-        saveButton.setBackground(backgroundColor);
-        exitButton.setBackground(backgroundColor);
-        playButton.setBackground(backgroundColor);
-        pauseButton.setBackground(backgroundColor);
-        newMeasureButton.setBackground(backgroundColor);
 
+        JRadioButton saveButton = createHeaderButton("Save", backgroundColor, e -> saveAndExit());
+        JRadioButton exitButton = createHeaderButton("Exit", backgroundColor, e -> exitApplication());
+        JRadioButton playButton = createHeaderButton("Play", backgroundColor, e -> startSong(song));
+        JRadioButton pauseButton = createHeaderButton("Pause", backgroundColor, e -> stopSong(song));
+        JRadioButton newMeasureButton = createHeaderButton("New", backgroundColor, e -> openMeasureView());
 
-        header.add(saveButton);
-        header.add(exitButton);
-        header.add(playButton);
-        header.add(pauseButton);
-        header.add(newMeasureButton);
-
-
-        //Plays the song
-        playButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                startSong(song);
-
-            }
-        });
-
-        //Pauses the song
-        pauseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                stopSong(song);
-            }
-        });
-
-        //Pauses the song
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainFrame.dispose();
-                new Menu();
-            }
-        });
-
-        //Pauses the song
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                songList.put(song.getName(), song);
-                try {
-                    jsonWriter.open();
-                    jsonWriter.write(songList);
-                    jsonWriter.close();
-                    System.out.println("Saved song list to " + JSON_STORE);
-                } catch (FileNotFoundException er) {
-                    System.out.println("Unable to write to file: " + JSON_STORE);
-                }
-
-                mainFrame.dispose();
-                new Menu();
-            }
-        }
-        );
-
-
-        newMeasureButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MeasureCreationListener listener = new MeasureCreationListener() {
-                    @Override
-                    public void onMeasureCreated(Measure measure) {
-                        addMeasureToBasket(measure);
-                        layeredPane.revalidate();
-                        layeredPane.repaint();
-                    }
-                };
-                MeasureView measureView = new MeasureView(mainFrame, listener);
-                measureView.setVisible(true);
-            }
-        });
-
-
-
+        addButtonsToPanel(header, saveButton, exitButton, playButton, pauseButton, newMeasureButton);
+        header.setVisible(true);
         return header;
+    }
+
+    private void addButtonsToPanel(JPanel panel, JRadioButton... buttons) {
+        for (JRadioButton button : buttons) {
+            panel.add(button);
+        }
+        panel.add(Box.createVerticalGlue());
+    }
+
+    private JRadioButton createHeaderButton(String text, Color bg, ActionListener actionListener) {
+        JRadioButton button = new JRadioButton(text);
+        button.setBackground(bg);
+        button.addActionListener(actionListener);
+        return button;
+    }
+
+    private void saveAndExit() {
+        songList.put(song.getName(), song);
+        try {
+            jsonWriter.open();
+            jsonWriter.write(songList);
+            jsonWriter.close();
+            System.out.println("Saved song list to " + JSON_STORE);
+        } catch (FileNotFoundException er) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+
+        mainFrame.dispose();
+        new Menu();
+    }
+
+    private void exitApplication() {
+        mainFrame.dispose();
+        new Menu();
+    }
+
+    private void openMeasureView() {
+        MeasureCreationListener listener = new MeasureCreationListener() {
+            @Override
+            public void onMeasureCreated(Measure measure) {
+                addMeasureToBasket(measure);
+                layeredPane.revalidate();
+                layeredPane.repaint();
+            }
+        };
+        MeasureView measureView = new MeasureView(mainFrame, listener);
+        measureView.setVisible(true);
     }
 
     public void addMeasureToBasket(Measure measure) {

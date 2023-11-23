@@ -28,105 +28,132 @@ public class Menu extends Screen {
 
     public Menu() {
         super();
+        mainFrame.setLayout(new BorderLayout());
+        initializeJsonComponents();
+        loadSongList();
+        initializeUIComponents();
+        setupMenuPanel();
+        configureMainFrame();
+
+
+    }
+
+    // EFFECT: Initializes JSON components for reading and writing song data
+    private void initializeJsonComponents() {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
+    }
 
-        mainFrame.setLayout(new BorderLayout());
-
+    private void loadSongList() {
         try {
             songList = jsonReader.read();
             System.out.println("Loaded song list from " + JSON_STORE);
         } catch (IOException | JSONException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
         }
+    }
 
+    // EFFECT: Initializes basic UI components of the Menu
+    private void initializeUIComponents() {
         ImageIcon imageIcon = new ImageIcon("./src/main/ui/images/Logo.png");
         JLabel imageLabel = new JLabel(imageIcon);
         mainFrame.add(imageLabel, BorderLayout.NORTH);
+    }
 
+    // EFFECT: Sets up the menu panel with radio buttons for user interaction
+    private void setupMenuPanel() {
+        JPanel menuPanel = createMenuPanel();
 
-        JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.PAGE_AXIS));
-        menuPanel.add(Box.createVerticalGlue());
-        JRadioButton newSongButton = new JRadioButton("New Song");
-        JRadioButton loadSongButton = new JRadioButton("Load Song");
-        JRadioButton exitButton = new JRadioButton("Exit");
+        JRadioButton newSongButton = createRadioButton("New Song", e -> handleNewSongAction());
+        JRadioButton loadSongButton = createRadioButton("Load Song", e -> handleLoadSongAction());
+        JRadioButton exitButton = createRadioButton("Exit", e -> mainFrame.dispose());
+
         ButtonGroup menuGroup = new ButtonGroup();
         menuGroup.add(newSongButton);
         menuGroup.add(loadSongButton);
         menuGroup.add(exitButton);
-        menuPanel.add(newSongButton);
-        menuPanel.add(loadSongButton);
-        menuPanel.add(exitButton);
-        menuPanel.add(Box.createVerticalGlue());
-        mainFrame.add(menuPanel, BorderLayout.CENTER);
 
-        // Pack and set visible
+        addButtonsToPanel(menuPanel, newSongButton, loadSongButton, exitButton);
+        mainFrame.add(menuPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel createMenuPanel() {
+        JPanel menuPanel = new JPanel();
+        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.PAGE_AXIS));
+        menuPanel.add(Box.createVerticalGlue());
+        return menuPanel;
+    }
+
+    private JRadioButton createRadioButton(String text, ActionListener actionListener) {
+        JRadioButton button = new JRadioButton(text);
+        button.addActionListener(actionListener);
+        return button;
+    }
+
+    private void addButtonsToPanel(JPanel panel, JRadioButton... buttons) {
+        for (JRadioButton button : buttons) {
+            panel.add(button);
+        }
+        panel.add(Box.createVerticalGlue());
+    }
+
+    private void handleNewSongAction() {
+        String songName = JOptionPane.showInputDialog(mainFrame, "Enter the name of the new song:");
+
+        // Check if a name was entered
+        if (songName != null && !songName.trim().isEmpty()) {
+            // Create a new Song object with the entered name
+            // Assuming the Song constructor takes a name as an argument
+            Song newSong = new Song(songName);
+
+            // Add the new song to the song list and update JSON (if required)
+            songList.put(songName, newSong);
+            try {
+                jsonWriter.open();
+                jsonWriter.write(songList);
+                jsonWriter.close();
+                System.out.println("Saved new song to " + JSON_STORE);
+            } catch (IOException ex) {
+                System.out.println("Unable to write to file: " + JSON_STORE);
+            }
+
+            // Dispose the current frame and open MainView with the new song
+            mainFrame.dispose();
+            MainView main = new MainView(newSong, songList);
+        }
+    }
+
+    private void handleLoadSongAction() {
+        JFrame songSelectFrame = new JFrame("Select a Song");
+        songSelectFrame.setLayout(new FlowLayout());
+        songSelectFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        for (String songKey : songList.keySet()) {
+            JButton songButton = new JButton(songKey);
+            songButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    songSelectFrame.dispose();
+                    mainFrame.dispose();
+                    MainView main = new MainView(songList.get(songKey), songList);
+                }
+            });
+            songSelectFrame.add(songButton);
+        }
+
+        songSelectFrame.pack();
+        songSelectFrame.setVisible(true);
+    }
+
+
+    // EFFECT: Configures the main application frame
+    private void configureMainFrame() {
         mainFrame.pack();
         mainFrame.setSize(900, 700);
         mainFrame.setVisible(true);
-
-        newSongButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Prompt for the song name
-                String songName = JOptionPane.showInputDialog(mainFrame, "Enter the name of the new song:");
-
-                // Check if a name was entered
-                if (songName != null && !songName.trim().isEmpty()) {
-                    // Create a new Song object with the entered name
-                    // Assuming the Song constructor takes a name as an argument
-                    Song newSong = new Song(songName);
-
-                    // Add the new song to the song list and update JSON (if required)
-                    songList.put(songName, newSong);
-                    try {
-                        jsonWriter.open();
-                        jsonWriter.write(songList);
-                        jsonWriter.close();
-                        System.out.println("Saved new song to " + JSON_STORE);
-                    } catch (IOException ex) {
-                        System.out.println("Unable to write to file: " + JSON_STORE);
-                    }
-
-                    // Dispose the current frame and open MainView with the new song
-                    mainFrame.dispose();
-                    MainView main = new MainView(newSong, songList);
-                }
-            }
-        });
-
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainFrame.dispose();
-            }
-        });
-
-        loadSongButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame songSelectFrame = new JFrame("Select a Song");
-                songSelectFrame.setLayout(new FlowLayout());
-                songSelectFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-                for (String songKey : songList.keySet()) {
-                    JButton songButton = new JButton(songKey);
-                    songButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            songSelectFrame.dispose();
-                            mainFrame.dispose();
-                            MainView main = new MainView(songList.get(songKey), songList);
-                        }
-                    });
-                    songSelectFrame.add(songButton);
-                }
-
-                songSelectFrame.pack();
-                songSelectFrame.setVisible(true);
-            }
-        });
     }
+
+
+
 
 }

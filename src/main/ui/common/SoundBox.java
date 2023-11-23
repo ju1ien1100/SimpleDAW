@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
 
+//A class for displaying a box which represents a sound
 public class SoundBox {
 
     private long duration;
@@ -19,7 +20,7 @@ public class SoundBox {
     private Point initialClick;
 
 
-
+    //Constructor
     public SoundBox(long duration, long height, Color color) {
         this.duration = duration;
         this.height = height;
