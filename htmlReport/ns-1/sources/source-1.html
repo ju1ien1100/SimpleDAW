@@ -1,0 +1,271 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Main</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">ui</a>
+</div>
+
+<h1>Coverage Summary for Class: Main (ui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Main</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (6/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    48%
+  </span>
+  <span class="absValue">
+    (47/98)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package ui;
+&nbsp;
+&nbsp;import model.*;
+&nbsp;import java.util.Scanner;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="nc">&nbsp;public class Main {</b>
+&nbsp;
+&nbsp;    public static void main(String[] args) {
+<b class="fc">&nbsp;        greet();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void greet() {
+<b class="fc">&nbsp;        displayAsciiArt();</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;Do you want to make a new song?:&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+<b class="fc">&nbsp;        String userResponse = scanner.nextLine().toLowerCase();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (userResponse.equals(&quot;yes&quot;)) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;Amazing! Lets get you started&quot;);</b>
+<b class="fc">&nbsp;            Song userSong = new Song();</b>
+<b class="fc">&nbsp;            mainView(userSong);</b>
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Okay...we&#39;ll be waiting&quot;);</b>
+<b class="nc">&nbsp;            greet();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void showInstruments() {
+<b class="nc">&nbsp;        System.out.println(&quot;What instrument do you want:&quot;);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;-piano&quot;);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;-violin&quot;);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;-organ&quot;);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;-synth&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void mainView(Song userSong) {
+<b class="fc">&nbsp;        viewSong(userSong);</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;Do you want to add a measure:&quot;);</b>
+<b class="fc">&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+<b class="fc">&nbsp;        String userResponse = scanner.nextLine().toLowerCase();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (userResponse.equals(&quot;yes&quot;)) {</b>
+<b class="nc">&nbsp;            showInstruments();</b>
+<b class="nc">&nbsp;            String instrument = scanner.nextLine().toLowerCase();</b>
+<b class="nc">&nbsp;            Measure userMeasure = new Measure(instrument);</b>
+<b class="nc">&nbsp;            populateMeasure(userMeasure);</b>
+&nbsp;
+<b class="nc">&nbsp;            System.out.println(&quot;What time do you want this added (i.e what x index?)&quot;);</b>
+<b class="nc">&nbsp;            int xindex  = scanner.nextInt();</b>
+&nbsp;
+<b class="nc">&nbsp;            System.out.println(&quot;What channel do you want to added (i.e what y index?)&quot;);</b>
+<b class="nc">&nbsp;            int yindex = scanner.nextInt();</b>
+&nbsp;
+<b class="nc">&nbsp;            userSong.addMeasure(yindex, xindex, userMeasure);</b>
+<b class="nc">&nbsp;            mainView(userSong);</b>
+<b class="nc">&nbsp;        } else {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;Do you want to play your song?:&quot;);</b>
+<b class="fc">&nbsp;            String terminal = scanner.nextLine().toLowerCase();</b>
+<b class="fc">&nbsp;            if (terminal.equals(&quot;yes&quot;)) {</b>
+<b class="fc">&nbsp;                Thread playThread = new Thread(() -&gt; userSong.playSong());</b>
+<b class="fc">&nbsp;                playThread.start();</b>
+<b class="fc">&nbsp;                System.out.println(&quot;enter &#39;pause&#39; to pause the song&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;                String response = scanner.nextLine().toLowerCase();</b>
+<b class="fc">&nbsp;                if (response.equals(&quot;pause&quot;)) {</b>
+<b class="fc">&nbsp;                    userSong.pauseSong();</b>
+&nbsp;                    try {
+<b class="fc">&nbsp;                        playThread.join();</b>
+<b class="nc">&nbsp;                    } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;                        e.printStackTrace();</b>
+<b class="fc">&nbsp;                    }</b>
+<b class="fc">&nbsp;                    mainView(userSong);</b>
+&nbsp;                }
+<b class="nc">&nbsp;            } else {</b>
+<b class="nc">&nbsp;                mainView(userSong);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void viewSong(Song userSong) {
+<b class="fc">&nbsp;        Measure[][] measures = userSong.getMeasures();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; measures.length; i++) {</b>
+<b class="fc">&nbsp;            for (int j = 0; j &lt; measures[i].length; j++) {</b>
+<b class="fc">&nbsp;                if (measures[i][j] != null) {</b>
+<b class="nc">&nbsp;                    System.out.print(&quot; &quot; + measures[i][j].getInstrument() + &quot; &quot;);</b>
+&nbsp;                } else {
+<b class="fc">&nbsp;                    System.out.print(&quot; empty &quot;);</b>
+&nbsp;                }
+&nbsp;
+&nbsp;            }
+<b class="fc">&nbsp;            System.out.println();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void viewMeasure(Measure userMeasure) {
+<b class="nc">&nbsp;        String[] notes = userMeasure.getStringNotes();</b>
+<b class="nc">&nbsp;        System.out.print(&quot;This measure has &quot;);</b>
+<b class="nc">&nbsp;        for (String note: notes) {</b>
+<b class="nc">&nbsp;            System.out.print(note + &quot;, &quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        System.out.println();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void populateMeasure(Measure userMeasure) {
+<b class="nc">&nbsp;        viewMeasure(userMeasure);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Do you want to add a Note:&quot;);</b>
+<b class="nc">&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+<b class="nc">&nbsp;        String userResponse = scanner.nextLine().toLowerCase();</b>
+&nbsp;        if (userResponse.equals(&quot;yes&quot;)) {
+<b class="nc">&nbsp;</b>
+&nbsp;            System.out.println(&quot;What note (i.e C, C#, D, D#,...&quot;);
+<b class="nc">&nbsp;            String pitch = scanner.nextLine();</b>
+<b class="nc">&nbsp;</b>
+&nbsp;            System.out.println(&quot;Whats the duration of the note (in milliseconds)&quot;);
+<b class="nc">&nbsp;            long duration  = scanner.nextLong();</b>
+<b class="nc">&nbsp;</b>
+&nbsp;            System.out.println(&quot;What veloctiy do you want the note? (600 recommended)&quot;);
+<b class="nc">&nbsp;            int velocity = scanner.nextInt();</b>
+<b class="nc">&nbsp;            Note newNote = new Note(pitch, duration, velocity);</b>
+<b class="nc">&nbsp;            userMeasure.addNote(newNote);</b>
+<b class="nc">&nbsp;            populateMeasure(userMeasure);</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Are you done?&quot;);</b>
+<b class="nc">&nbsp;            String terminal = scanner.nextLine().toLowerCase();</b>
+<b class="nc">&nbsp;            if (terminal.equals(&quot;yes&quot;)) {</b>
+&nbsp;                return;
+&nbsp;            } else {
+<b class="nc">&nbsp;                populateMeasure(userMeasure);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void timeOut(int time) {
+&nbsp;        try {
+<b class="fc">&nbsp;            Thread.sleep(time);  // Sleep for 500 milliseconds (0.5 seconds)</b>
+<b class="nc">&nbsp;        } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void displayAsciiArt() {
+<b class="fc">&nbsp;        System.out.println(&quot;  ______ _          _            _       &quot;);</b>
+<b class="fc">&nbsp;        timeOut(300);</b>
+<b class="fc">&nbsp;        System.out.println(&quot; |  ____| |        | |          | |      &quot;);</b>
+<b class="fc">&nbsp;        timeOut(300);</b>
+<b class="fc">&nbsp;        System.out.println(&quot; | |__  | |        | |_   _     | |_   _ &quot;);</b>
+<b class="fc">&nbsp;        timeOut(300);</b>
+<b class="fc">&nbsp;        System.out.println(&quot; |  __| | |    _   | | | | |_   | | | | |&quot;);</b>
+<b class="fc">&nbsp;        timeOut(300);</b>
+<b class="fc">&nbsp;        System.out.println(&quot; | |    | |___| |__| | |_| | |__| | |_| |&quot;);</b>
+<b class="fc">&nbsp;        timeOut(300);</b>
+<b class="fc">&nbsp;        System.out.println(&quot; |_|    |______\\____/ \\__,_|\\____/ \\__,_|&quot;);</b>
+<b class="fc">&nbsp;        System.out.println();</b>
+<b class="fc">&nbsp;        System.out.println();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-11 13:29</div>
+</div>
+</body>
+</html>
