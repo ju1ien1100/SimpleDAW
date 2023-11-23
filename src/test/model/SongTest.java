@@ -36,6 +36,14 @@ class SongTest {
     }
 
     @Test
+    public void testRemoveMeasure() {
+        testSong.addMeasure(0,1, testMeasure);
+        assertEquals(testMeasure, testSong.getMeasures()[0][1]);
+        testSong.removeMeasure(0,1);
+        assertEquals(null, testSong.getMeasures()[0][1]);
+    }
+
+    @Test
     public void testPlayPauseSong() {
         testSong.addMeasure(0,0, testMeasure);
         assertFalse(testSong.getPlaying());

@@ -1,18 +1,8 @@
 package ui.common;
 
-import model.Measure;
-import model.Song;
-import ui.common.SoundBox;
-import persistence.JsonReader;
-import persistence.JsonWriter;
-
-import java.util.Random;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.*;
-import java.util.List;
+
 
 public class GridPanel extends JPanel {
     private int rows;

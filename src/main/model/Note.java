@@ -48,6 +48,8 @@ public class Note implements Writable {
         this.velocity = velocity;
     }
 
+
+    //Saves the note to json
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

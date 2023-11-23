@@ -66,6 +66,7 @@ public class MeasureTest {
         assertEquals("C", testMeasure.getStringNotes()[0]);
         assertEquals("D", testMeasure.getStringNotes()[1]);
         assertEquals("C", testMeasure.getStringNotes()[2]);
+        assertEquals(3000, testMeasure.getDuration());
     }
 
     @Test

@@ -2,9 +2,7 @@ package ui.components;
 
 import model.Measure;
 import model.Song;
-import ui.common.SoundBox;
 import ui.common.GridPanel;
-import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.common.MeasureCreationListener;
 
