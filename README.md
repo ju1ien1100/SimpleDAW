@@ -41,9 +41,31 @@ and indicators of what should be done/ can be done.
 - As a user, I want to be able to load in saved work from a json file (yes)
 - As a user, I want to be able to edit a premade song (yes)
 - As a user, I want to be able to save multiple songs (yes)
-- As a user, I want to be able to add audio files to my songs (needs dependencies)
 - As a user, I want to be able to view the different tracks/measures in my song (yes)
 - As a user, I want to be able to edit the different tracks/measures (yes)
 - As a user, I want to be able to control audio features with viewable inputs (yes)
+- As a user, I want to be able to make multiple songs and edit them if the user chooses (yes),
+this is done in the menu page and you can add and load songs into the application.
+- As a user, I want to be abled to make multiple measures in a song and to add those measures in different places
+this is done by pressing the new button in the navbar of the mainView header. 
+- As a user, I want to be abled to add multiple notes in a measure and to add the notes to the measure
+after pressing the new button, the notes should be able to have different properties. 
+- As a user, I want to be abled to load in previous songs I have made in the application
+- As a user, I want to be abled to save in the current song being worked on in the application. 
+
+
+# Instructions for Grader
+- First note that on the menu the logo is an image, I wasn't sure where else an image would go in this
+- To load a previous song press the load button in the menu, this prompts you to the different songs available and 
+you can pick the one that you want to work on. OR you can make a new song where it takes you to a dialogue where you can
+name your new song. 
+- While in the mainView you can generate "add an Xs to a Y" by pressing in the new in the top corner to make
+a new measure, Additionally you can drag the given measures at the botton onto the grid and they will be added to the song.
+Another feature is that you can move the measures inside of the grid to move their position in the Y
+- Lastly, I know this isn't a requirement but you can also remove the Xs from the Y by double clicking on a measure in 
+the grid. 
+- TO add notes to a measure "adding more Xs to Y" it is pretty self explanatory and the dialogue prompts
+are clear. 
+- You can save the state of the application in the mainView by pressing the save button
 
 

@@ -132,7 +132,17 @@ public class Song implements Writable {
                     }
                 }
                 synchronizeThreads(threads);
+                timeOut(500);
             }
+        }
+    }
+
+    //EFFECTS: This is a timeout where the time is in milliseconds
+    private static void timeOut(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

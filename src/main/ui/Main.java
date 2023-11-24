@@ -19,7 +19,7 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-
+//Main entry point of the topic
 public class Main {
 //    private static final String JSON_STORE = "./data/songList.json";
 //    private static Map<String, Song> songList = new HashMap<String, Song>() {};

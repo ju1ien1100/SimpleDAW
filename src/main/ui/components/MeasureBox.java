@@ -10,6 +10,7 @@ public class MeasureBox extends SoundBox {
 
     private Measure measure;
 
+    //constructor
     public MeasureBox(long duration, long height, Color color, Measure measure) {
         super(duration, height, color);
 

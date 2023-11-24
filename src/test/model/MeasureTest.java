@@ -60,6 +60,7 @@ public class MeasureTest {
 
     @Test
     public void testGetStringNotes() {
+        assertEquals(0, testMeasure.getDuration());
         testMeasure.addNote(noteC);
         testMeasure.addNote(noteD);
         testMeasure.addNote(noteC);

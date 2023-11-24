@@ -10,6 +10,7 @@ public class GridPanel extends JPanel {
     private int cellWidth;
     private int cellHeight;
 
+    //Constructor
     public GridPanel(int rows, int columns, int cellWidth, int cellHeight) {
         this.rows = rows;
         this.columns = columns;
@@ -19,7 +20,7 @@ public class GridPanel extends JPanel {
     }
 
 
-    //Properly makes grid
+    //Effects: Properly makes grid with framesize
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

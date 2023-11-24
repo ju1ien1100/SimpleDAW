@@ -25,7 +25,7 @@ public class Menu extends Screen {
     private static JsonWriter jsonWriter;
     private static JsonReader jsonReader;
 
-
+    //Constructor
     public Menu() {
         super();
         mainFrame.setLayout(new BorderLayout());
@@ -44,6 +44,7 @@ public class Menu extends Screen {
         jsonReader = new JsonReader(JSON_STORE);
     }
 
+    //Effects: loads the jsonfile onto the SongList
     private void loadSongList() {
         try {
             songList = jsonReader.read();
@@ -77,6 +78,7 @@ public class Menu extends Screen {
         mainFrame.add(menuPanel, BorderLayout.CENTER);
     }
 
+    //Effects: creates menu pattern
     private JPanel createMenuPanel() {
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.PAGE_AXIS));
@@ -84,12 +86,14 @@ public class Menu extends Screen {
         return menuPanel;
     }
 
+    //effects: creates radio button
     private JRadioButton createRadioButton(String text, ActionListener actionListener) {
         JRadioButton button = new JRadioButton(text);
         button.addActionListener(actionListener);
         return button;
     }
 
+    //effects: adds button to menu panel
     private void addButtonsToPanel(JPanel panel, JRadioButton... buttons) {
         for (JRadioButton button : buttons) {
             panel.add(button);
@@ -97,6 +101,7 @@ public class Menu extends Screen {
         panel.add(Box.createVerticalGlue());
     }
 
+    //effects: method for what to run when making a new measure
     private void handleNewSongAction() {
         String songName = JOptionPane.showInputDialog(mainFrame, "Enter the name of the new song:");
 
@@ -123,6 +128,7 @@ public class Menu extends Screen {
         }
     }
 
+    //Effects: opens dialogue and loads selected song in
     private void handleLoadSongAction() {
         JFrame songSelectFrame = new JFrame("Select a Song");
         songSelectFrame.setLayout(new FlowLayout());
@@ -146,7 +152,7 @@ public class Menu extends Screen {
     }
 
 
-    // EFFECT: Configures the main application frame
+    // EFFECT: Configures the main application frame to size
     private void configureMainFrame() {
         mainFrame.pack();
         mainFrame.setSize(900, 700);

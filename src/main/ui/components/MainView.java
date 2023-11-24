@@ -17,6 +17,8 @@ import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 
+
+// Main view for editing the song
 public class MainView extends Screen {
 
     private Song song;
@@ -34,7 +36,7 @@ public class MainView extends Screen {
 
 
 
-
+    //COnstructor
     public MainView(Song song, Map<String, Song> songList) {
         super();
         initializeFields(song, songList);
@@ -81,10 +83,14 @@ public class MainView extends Screen {
         this.layeredPane = new JLayeredPane();
     }
 
+
+    //EFffects: makes the soundbox moveable and placeable on grid
     @SuppressWarnings("methodlength")
     public void makeSoundBoxDraggable(MeasureBox measureBox, int trackIndex, int measureIndex) {
         MouseAdapter ma = new MouseAdapter() {
             Point initialLocation;
+            int originalTrackIndex = trackIndex;
+            int originalMeasureIndex = measureIndex;
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -94,31 +100,22 @@ public class MainView extends Screen {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                // Calculate the drop location index based on the grid
                 int x = e.getX() + initialLocation.x;
                 int y = e.getY() + initialLocation.y;
+
+                // Snapping to the nearest grid
                 int gridWidth = mainFrame.getWidth() / song.getMeasures()[0].length;
                 int gridHeight = (int) (mainFrame.getHeight() * 0.5) / song.getMeasures().length;
-                int dropTrackIndex = y / gridHeight;
-                int dropMeasureIndex = x / gridWidth;
+                int dropTrackIndex = Math.round((float)y / gridHeight);
+                int dropMeasureIndex = Math.round((float)x / gridWidth);
 
-                // Update the song measure array with the new measure
-                if (song.getMeasures()[0].length - 1 > dropMeasureIndex && dropMeasureIndex > 0) {
-                    if (song.getMeasures().length - 1 > dropTrackIndex && dropTrackIndex > 0) {
-                        song.addMeasure(dropTrackIndex, dropMeasureIndex, measureBox.getMeasure());
-                    }
-                }
-                // Remove the measure from the old location
-                song.getMeasures()[trackIndex][measureIndex] = null;
-                viewSong(song);
-                // Update the SoundBox location visually
-                measureBox.getBoxPanel().setBounds(
-                        x,
-                        y,
-                        measureBox.getBoxPanel().getWidth(),
-                        measureBox.getBoxPanel().getHeight());
-                layeredPane.revalidate();
-                layeredPane.repaint();
+                // Snap the x, y to the nearest grid
+                x = dropMeasureIndex * gridWidth;
+                y = dropTrackIndex * gridHeight;
+                song.removeMeasure(trackIndex, measureIndex);
+                // Update the song and measure box position
+                updateSongWithNewMeasure(dropTrackIndex, dropMeasureIndex, measureBox);
+                updateMeasureBoxVisuals(measureBox, x, y);
             }
 
             @Override
@@ -141,7 +138,7 @@ public class MainView extends Screen {
                     layeredPane.revalidate();
                     layeredPane.repaint();
                     // Refresh the view of the song if needed
-                    viewSong(song);
+                    //viewSong(song);
                 }
             }
         };
@@ -150,7 +147,7 @@ public class MainView extends Screen {
         measureBox.getBoxPanel().addMouseMotionListener(ma);
     }
 
-    @SuppressWarnings("methodlength")
+    //EFfects: makes a measureBox moveable in the JLayeredPane
     public void makeMeasureBoxDraggable(MeasureBox measureBox) {
         MouseAdapter ma = new MouseAdapter() {
             Point initialLocation;
@@ -159,55 +156,78 @@ public class MainView extends Screen {
             public void mousePressed(MouseEvent e) {
                 initialLocation = measureBox.getBoxPanel().getLocation();
                 layeredPane.moveToFront(measureBox.getBoxPanel());
-
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                // Calculate the drop location index based on the grid
-                int x = e.getX() + initialLocation.x;
-                int y = e.getY() + initialLocation.y;
-                int gridWidth = mainFrame.getWidth() / song.getMeasures()[0].length;
-                int gridHeight = (int) (mainFrame.getHeight() * 0.5) / song.getMeasures().length;
-                int dropTrackIndex = y / gridHeight;
-                int dropMeasureIndex = x / gridWidth;
-
-                // Update the song measure array with the new measure
-                if (song.getMeasures()[0].length - 1 > dropMeasureIndex && dropMeasureIndex > 0) {
-                    if (song.getMeasures().length - 1 > dropTrackIndex && dropTrackIndex > 0) {
-                        song.addMeasure(dropTrackIndex, dropMeasureIndex, measureBox.getMeasure());
-                        makeSoundBoxDraggable(measureBox, dropTrackIndex, dropMeasureIndex);
-                    }
-                }
-                viewSong(song);
-                // Update the SoundBox location visually
-                measureBox.getBoxPanel().setBounds(
-                        x,
-                        y,
-                        (int) measureBox.getMeasure().getDuration() / 10,
-                        measureBox.getBoxPanel().getHeight());
-                layeredPane.revalidate();
-                layeredPane.repaint();
+                handleMeasureBoxDrop(e, measureBox, initialLocation);
             }
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                // Update the location of the SoundBox during the drag
-                int x = e.getX() + initialLocation.x;
-                int y = e.getY() + initialLocation.y;
-                measureBox.getBoxPanel().setLocation(x, y);
-                layeredPane.repaint();
+                updateMeasureBoxLocationDuringDrag(measureBox, e, initialLocation);
             }
-
-
         };
-
         measureBox.getBoxPanel().addMouseListener(ma);
         measureBox.getBoxPanel().addMouseMotionListener(ma);
     }
 
+    //Effects: function for handling the release of the measureBox
+    private void handleMeasureBoxDrop(MouseEvent e, MeasureBox measureBox, Point initialLocation) {
+        int x = e.getX() + initialLocation.x;
+        int y = e.getY() + initialLocation.y;
+        int gridWidth = mainFrame.getWidth() / song.getMeasures()[0].length;
+        int gridHeight = (int) (mainFrame.getHeight() * 0.5) / song.getMeasures().length;
+        int dropTrackIndex = (int) (y + mainFrame.getHeight() * 0.1) / gridHeight;
+        int dropMeasureIndex = x / gridWidth;
+
+        if (isValidDropPosition(dropTrackIndex, dropMeasureIndex)) {
+            updateSongWithNewMeasure(dropTrackIndex, dropMeasureIndex, measureBox);
+        }
+        updateMeasureBoxVisuals(measureBox, x, y);
+    }
+
+    //Effects: checks if it is a valid position to drop inside of song
+    private boolean isValidDropPosition(int trackIndex, int measureIndex) {
+        if (trackIndex > 0 && trackIndex < song.getMeasures().length) {
+            if (measureIndex > 0 && measureIndex < song.getMeasures()[0].length) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    //Effects: updates the song with the new measure being dropped
+    private void updateSongWithNewMeasure(int trackIndex, int measureIndex, MeasureBox measureBox) {
+        song.addMeasure(trackIndex, measureIndex, measureBox.getMeasure());
+        makeSoundBoxDraggable(measureBox, trackIndex, measureIndex);
+        //viewSong(song);
+    }
+
+    //EFfects: updates the visual of the layered pane
+    private void updateMeasureBoxVisuals(MeasureBox measureBox, int x, int y) {
+        measureBox.getBoxPanel().setBounds(
+                x,
+                y,
+                (int) measureBox.getMeasure().getDuration() / 10,
+                measureBox.getBoxPanel().getHeight());
+        layeredPane.revalidate();
+        layeredPane.repaint();
+    }
+
+    //Effects: function for inside the drag moment
+    private void updateMeasureBoxLocationDuringDrag(MeasureBox measureBox, MouseEvent e, Point initialLocation) {
+        int x = e.getX() + initialLocation.x;
+        int y = e.getY() + initialLocation.y;
+        measureBox.getBoxPanel().setLocation(x, y);
+        layeredPane.repaint();
+    }
 
 
+
+
+    //Effects: constructs the grid panel for the songs
     public void trackBasket() {
         Measure[][] measures = song.getMeasures();
         int gridWidth = mainFrame.getWidth() / song.getMeasures()[0].length;
@@ -236,7 +256,7 @@ public class MainView extends Screen {
         layeredPane.repaint();
     }
 
-
+    //Effects: sets up the measure basket for placing measures
     private void setupMeasureBaskets() {
         List<String> instruments = new ArrayList<>(measureMap.keySet());
         int positionY = (int) (mainFrame.getHeight() * 0.5);
@@ -252,6 +272,7 @@ public class MainView extends Screen {
         layeredPane.repaint();
     }
 
+    //Effects: makes measure box for each measure in song
     private int processMeasures(List<Measure> measures, int positionX, int positionY, int height, Color color) {
         for (Measure measure : measures) {
             int duration = (int) measure.getDuration() / 10;
@@ -260,6 +281,7 @@ public class MainView extends Screen {
         return positionX;
     }
 
+    //Effect: function for making one measure box
     private int addMeasureBox(Measure measure, int duration, int height, Color color, int positionX, int positionY) {
         MeasureBox measureBox = new MeasureBox(duration, height, color, measure);
         makeMeasureBoxDraggable(measureBox);
@@ -311,6 +333,7 @@ public class MainView extends Screen {
         return header;
     }
 
+    //Effects: function for adding buttons
     private void addButtonsToPanel(JPanel panel, JRadioButton... buttons) {
         for (JRadioButton button : buttons) {
             panel.add(button);
@@ -318,6 +341,7 @@ public class MainView extends Screen {
         panel.add(Box.createVerticalGlue());
     }
 
+    //effects: function for creating header button
     private JRadioButton createHeaderButton(String text, Color bg, ActionListener actionListener) {
         JRadioButton button = new JRadioButton(text);
         button.setBackground(bg);
@@ -325,6 +349,7 @@ public class MainView extends Screen {
         return button;
     }
 
+    //Effects: function for saving the song
     private void saveAndExit() {
         songList.put(song.getName(), song);
         try {
@@ -340,11 +365,13 @@ public class MainView extends Screen {
         new Menu();
     }
 
+    //Effects: function for exiting mainview
     private void exitApplication() {
         mainFrame.dispose();
         new Menu();
     }
 
+    //Effects: function for making a new measure
     private void openMeasureView() {
         MeasureCreationListener listener = new MeasureCreationListener() {
             @Override
@@ -358,8 +385,9 @@ public class MainView extends Screen {
         measureView.setVisible(true);
     }
 
+    //Effects: function for adding made emasure to measure basket
     public void addMeasureToBasket(Measure measure) {
-        int positionY = (int) (mainFrame.getHeight() * 0.5) + 150;
+        int positionY = (int) (mainFrame.getHeight() * 0.5) + 120;
         int positionX = 0;
         int height = (int) (mainFrame.getHeight() * 0.5) / song.getMeasures().length;
         String instrument = measure.getInstrument();
@@ -392,20 +420,20 @@ public class MainView extends Screen {
         userSong.pauseSong();
     }
 
-    private void viewSong(Song userSong) {
-        Measure[][] measures = userSong.getMeasures();
-        System.out.println("Song:" + userSong.getName());
-        for (int i = 0; i < measures.length; i++) {
-            for (int j = 0; j < measures[i].length; j++) {
-                if (measures[i][j] != null) {
-                    System.out.print(" " + measures[i][j].getInstrument() + " ");
-                } else {
-                    System.out.print(" empty ");
-                }
-            }
-            System.out.println();
-        }
-    }
-
+//    //Effects: prints song to terminal (for debuging)
+//    private void viewSong(Song userSong) {
+//        Measure[][] measures = userSong.getMeasures();
+//        System.out.println("Song:" + userSong.getName());
+//        for (int i = 0; i < measures.length; i++) {
+//            for (int j = 0; j < measures[i].length; j++) {
+//                if (measures[i][j] != null) {
+//                    System.out.print(" " + measures[i][j].getInstrument() + " ");
+//                } else {
+//                    System.out.print(" empty ");
+//                }
+//            }
+//            System.out.println();
+//        }
+//    }
 
 }

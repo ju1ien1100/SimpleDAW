@@ -38,6 +38,7 @@ public class JsonReader {
         return contentBuilder.toString();
     }
 
+    //Effects; parses through the songList (hashmap) and puts the song in
     private HashMap<String, Song> parseSongList(JSONObject jsonObject) {
         HashMap<String, Song> songList = new HashMap<>();
         for (String key : jsonObject.keySet()) {

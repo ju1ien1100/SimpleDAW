@@ -17,6 +17,7 @@ public abstract class Screen {
         initializeScreen();
     }
 
+    //Makes the screen
     private void initializeScreen() {
         mainFrame = new JFrame("FLJuJu");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

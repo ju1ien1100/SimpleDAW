@@ -11,14 +11,15 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-//A class to make measures
-public class MeasureView extends  JDialog {
+//A class to provide a view of making measures
+public class MeasureView extends JDialog {
 
 
     private final List<Note> notesInMeasure;
     private final DefaultListModel<String> notesListModel;
     private MeasureCreationListener creationListener;
 
+    //Constructor
     public MeasureView(Frame owner, MeasureCreationListener listener) {
         super(owner, "Create Measure", true);
         this.creationListener = listener;
