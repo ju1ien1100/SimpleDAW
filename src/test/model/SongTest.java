@@ -55,6 +55,8 @@ class SongTest {
     public void testPopulatemeasures() {
         testSong.addMeasure(0, 0, testMeasure);
         assertNotNull(testSong.populateMeasures().get("piano"));
+        testSong.addMeasure(0, 1, testMeasure);
+        assertNotNull(testSong.populateMeasures().get("piano"));
     }
 
     @Test
