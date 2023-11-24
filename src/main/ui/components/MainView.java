@@ -186,7 +186,7 @@ public class MainView extends Screen {
             updateSongWithNewMeasure(dropTrackIndex, dropMeasureIndex, measureBox);
         }
         updateMeasureBoxVisuals(measureBox, x, y);
-        viewSong(song);
+        //viewSong(song);
     }
 
     //Effects: checks if it is a valid position to drop inside of song
@@ -204,7 +204,7 @@ public class MainView extends Screen {
     private void updateSongWithNewMeasure(int trackIndex, int measureIndex, MeasureBox measureBox) {
         song.addMeasure(trackIndex, measureIndex, measureBox.getMeasure());
         makeSoundBoxDraggable(measureBox, trackIndex, measureIndex);
-        viewSong(song);
+        //viewSong(song);
     }
 
     //EFfects: updates the visual of the layered pane
@@ -423,19 +423,19 @@ public class MainView extends Screen {
     }
 
     //Effects: prints song to terminal (for debuging)
-    private void viewSong(Song userSong) {
-        Measure[][] measures = userSong.getMeasures();
-        System.out.println("Song:" + userSong.getName());
-        for (int i = 0; i < measures.length; i++) {
-            for (int j = 0; j < measures[i].length; j++) {
-                if (measures[i][j] != null) {
-                    System.out.print(" " + measures[i][j].getInstrument() + " ");
-                } else {
-                    System.out.print(" empty ");
-                }
-            }
-            System.out.println();
-        }
-    }
+//    private void viewSong(Song userSong) {
+//        Measure[][] measures = userSong.getMeasures();
+//        System.out.println("Song:" + userSong.getName());
+//        for (int i = 0; i < measures.length; i++) {
+//            for (int j = 0; j < measures[i].length; j++) {
+//                if (measures[i][j] != null) {
+//                    System.out.print(" " + measures[i][j].getInstrument() + " ");
+//                } else {
+//                    System.out.print(" empty ");
+//                }
+//            }
+//            System.out.println();
+//        }
+//    }
 
 }
