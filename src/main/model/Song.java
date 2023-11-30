@@ -26,6 +26,7 @@ public class Song implements Writable {
         this.measures = new Measure[DEFAULT_NUMTRACKS][DEFAULT_NUMMEASURE];
         this.bpm = 120;
         this.name = name;
+        EventLog.getInstance().logEvent(new Event("Added song: " + name));
 
     }
 
@@ -40,6 +41,7 @@ public class Song implements Writable {
     public void addMeasure(int trackIndex, int measureIndex, Measure measure) {
         measures[trackIndex][measureIndex] = measure;
         measure.setChannel(trackIndex);
+        EventLog.getInstance().logEvent(new Event("Added measure to song: " + name));
     }
 
     //EFFECTS: getter
@@ -51,6 +53,7 @@ public class Song implements Writable {
     //Modifies: this
     public void pauseSong() {
         this.playing = false;
+        EventLog.getInstance().logEvent(new Event(name + "paused"));
     }
 
     //EFFECTS: getter
@@ -65,6 +68,7 @@ public class Song implements Writable {
 
     public void removeMeasure(int trackIndex, int measureIndex) {
         measures[trackIndex][measureIndex] = null;
+        EventLog.getInstance().logEvent(new Event("Removed measure from song: " + name));
     }
 
     //EFFECTS: creates a new 2d array with one more row and then copies the current 2d array values in
@@ -76,7 +80,12 @@ public class Song implements Writable {
                 newMeasure[i][j] = measures[i][j];
             }
         }
+        EventLog.getInstance().logEvent(new Event("New track row in song: " + name));
         measures = newMeasure;
+    }
+
+    public void printLogs() {
+        EventLog.getInstance().printLog();
     }
 
     //EFFECTS: creates a new 2d array with one more column and then coppies current 2d array values in
@@ -88,6 +97,7 @@ public class Song implements Writable {
                 newMeasure[i][j] = measures[i][j];
             }
         }
+        EventLog.getInstance().logEvent(new Event("New measure column in song: " + name));
         measures = newMeasure;
     }
 
@@ -135,6 +145,7 @@ public class Song implements Writable {
                 timeOut(500);
             }
         }
+        EventLog.getInstance().logEvent(new Event("Playing song: " + name));
     }
 
     //EFFECTS: This is a timeout where the time is in milliseconds
@@ -208,6 +219,7 @@ public class Song implements Writable {
             tracksArray.put(measureArray);
         }
         json.put("tracks", tracksArray);
+
 
         return json;
     }

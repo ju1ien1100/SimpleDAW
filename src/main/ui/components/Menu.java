@@ -67,7 +67,7 @@ public class Menu extends Screen {
 
         JRadioButton newSongButton = createRadioButton("New Song", e -> handleNewSongAction());
         JRadioButton loadSongButton = createRadioButton("Load Song", e -> handleLoadSongAction());
-        JRadioButton exitButton = createRadioButton("Exit", e -> mainFrame.dispose());
+        JRadioButton exitButton = createRadioButton("Exit", e -> handleExitAction());
 
         ButtonGroup menuGroup = new ButtonGroup();
         menuGroup.add(newSongButton);
@@ -76,6 +76,14 @@ public class Menu extends Screen {
 
         addButtonsToPanel(menuPanel, newSongButton, loadSongButton, exitButton);
         mainFrame.add(menuPanel, BorderLayout.CENTER);
+    }
+
+    //Effects: saves the song and exits
+    private void handleExitAction() {
+        songList.get("TestSong").printLogs();
+
+        // Dispose the current frame and open MainView with the new song
+        mainFrame.dispose();
     }
 
     //Effects: creates menu pattern

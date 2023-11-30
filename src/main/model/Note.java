@@ -56,6 +56,7 @@ public class Note implements Writable {
         json.put("pitch", pitch);
         json.put("duration", duration);
         json.put("velocity", velocity);
+        EventLog.getInstance().logEvent(new Event("Saved note"));
         return json;
     }
 }

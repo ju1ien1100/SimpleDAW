@@ -28,6 +28,7 @@ public class Measure implements Writable {
     //MODIFIES: this
     public void addNote(Note note) {
         this.notes.add(note);
+        EventLog.getInstance().logEvent(new Event("Note added to measure: " + instrument));
     }
 
     // Requires: index > 0
@@ -38,8 +39,11 @@ public class Measure implements Writable {
             return false;
         } else {
             this.notes.add(index, note);
+            EventLog.getInstance().logEvent(new Event("Note replaced in measure: " + instrument));
             return true;
+
         }
+
     }
 
     //EFFECTS:
@@ -118,7 +122,7 @@ public class Measure implements Writable {
             notesArray.put(note.toJson());
         }
         json.put("notes", notesArray);
-
+        EventLog.getInstance().logEvent(new Event("saved: " + instrument));
         return json;
     }
 }
