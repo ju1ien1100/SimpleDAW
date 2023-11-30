@@ -69,3 +69,16 @@ are clear.
 - You can save the state of the application in the mainView by pressing the save button
 
 
+# Debugging Guide
+- A lot of method calls are made in this, however, most which are logged are directly related to the 
+changing of the audio which is logged and when objects are being successfully loaded and saved. To determine most of the places
+which they are added you can refer to the Song and Measure class, as these are where most editing features are. 
+
+
+- To display logs after using the application, press the exit button in the menu and they will be printed to the console.
+there is a 
+
+***Example logs***
+![img.png](img.png)
+
+
