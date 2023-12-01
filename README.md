@@ -78,7 +78,7 @@ which they are added you can refer to the Song and Measure class, as these are w
 - To display logs after using the application, press the exit button in the menu and they will be printed to the console.
 there is a 
 
-***Example logs***
+***Example logs*** 
 ![img.png](img.png)
 
 **Phase 4: Task 3**
